@@ -1,15 +1,15 @@
 # Issue tracker：GitHub
 
-本專案的 Issues 與 PRD 發佈於 GitHub repository `TavisLi/-`。由於本機 Sites 專案未設定 GitHub remote，所有 GitHub CLI 操作均應明確傳入 `--repo TavisLi/-`。
+本專案的 Issues 與 PRD 發佈於 GitHub repository `TavisLi/yunsheng-works`。由於本機 Sites 專案未設定 GitHub remote，所有 GitHub CLI 操作均應明確傳入 `--repo TavisLi/yunsheng-works`。
 
 ## 慣例
 
-- 建立 issue：`gh issue create --repo TavisLi/- --title "..." --body-file <file>`
-- 讀取 issue：`gh issue view <number> --repo TavisLi/- --comments`
-- 列出 issue：`gh issue list --repo TavisLi/- --state open`
-- 留言：`gh issue comment <number> --repo TavisLi/- --body "..."`
-- 新增或移除標籤：`gh issue edit <number> --repo TavisLi/- --add-label "..."`／`--remove-label "..."`
-- 關閉 issue：`gh issue close <number> --repo TavisLi/- --comment "..."`
+- 建立 issue：`gh issue create --repo TavisLi/yunsheng-works --title "..." --body-file <file>`
+- 讀取 issue：`gh issue view <number> --repo TavisLi/yunsheng-works --comments`
+- 列出 issue：`gh issue list --repo TavisLi/yunsheng-works --state open`
+- 留言：`gh issue comment <number> --repo TavisLi/yunsheng-works --body "..."`
+- 新增或移除標籤：`gh issue edit <number> --repo TavisLi/yunsheng-works --add-label "..."`／`--remove-label "..."`
+- 關閉 issue：`gh issue close <number> --repo TavisLi/yunsheng-works --comment "..."`
 
 ## Pull request 作為需求入口
 

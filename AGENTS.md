@@ -9,7 +9,7 @@
 
 ### Issue tracker
 
-Issues 與 PRD 統一追蹤於 GitHub repository `TavisLi/-`；外部 pull request 不作為 triage 需求入口。詳見 `docs/agents/issue-tracker.md`。
+Issues 與 PRD 統一追蹤於 GitHub repository `TavisLi/yunsheng-works`；外部 pull request 不作為 triage 需求入口。詳見 `docs/agents/issue-tracker.md`。
 
 ### Triage labels
 
