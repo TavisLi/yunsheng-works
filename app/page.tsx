@@ -31,18 +31,24 @@ const scenes = [
     title: "宿舍熄燈之後",
     copy: "一場偷偷進行的告別，把笑聲、酒氣與沒說完的真心留在盛夏夜裡。",
     motif: "紙杯 · 走廊 · 少年心事",
+    image: "/scene-01-dorm-after-lights.jpg",
+    imageAlt: "熄燈後，女生們圍坐在宿舍地板分享零食與心事的手繪場景",
   },
   {
     number: "02",
     title: "隔樓唱起《送別》",
     copy: "有人站在樓上，有人在樓下。歌聲越過欄杆，也越過再也回不去的年紀。",
     motif: "夜色 · 合唱 · 畢業",
+    image: "/scene-02-farewell-song.jpg",
+    imageAlt: "畢業夜，學生們分站上下兩層宿舍走廊合唱送別的手繪場景",
   },
   {
     number: "03",
     title: "十年後，打開時間膠囊",
     copy: "當年寫給未來的信終於重見陽光，他們才明白：青春沒有消失，只是換了一種方式留在身上。",
     motif: "舊信 · 茉莉 · 重逢",
+    image: "/scene-03-time-capsule-reunion.jpg",
+    imageAlt: "十年後，四位朋友在樹下打開時間膠囊與舊信的手繪場景",
   },
 ];
 
@@ -133,8 +139,8 @@ export default function Home() {
         <div className="sceneGrid">
           {scenes.map((scene) => (
             <article className="sceneCard" key={scene.number}>
+              <img className="sceneImage" src={scene.image} alt={scene.imageAlt} />
               <span className="sceneNumber">{scene.number}</span>
-              <div className="sceneLight" aria-hidden="true" />
               <div className="sceneContent">
                 <h3>{scene.title}</h3>
                 <p>{scene.copy}</p>

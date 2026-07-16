@@ -28,6 +28,9 @@ test("server-renders the finished novel promotion page", async () => {
   assert.match(html, /id="casting"/);
   assert.match(html, /非官方、非商業性的讀者想像選角/);
   assert.match(html, /casting-concept-ensemble\.png/);
+  assert.match(html, /scene-01-dorm-after-lights\.jpg/);
+  assert.match(html, /scene-02-farewell-song\.jpg/);
+  assert.match(html, /scene-03-time-capsule-reunion\.jpg/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
 
