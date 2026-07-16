@@ -2,19 +2,22 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "燦燦烈日下｜NINI 長篇小說",
+  title: "允生作品｜原創小說與網頁閱讀",
   description:
-    "有些人陪你長大，有些人教你告別。一部關於友情、初戀與十年重逢的青春成長小說。",
+    "允生的原創小說品牌。每一部作品都有自己的專屬網頁、免費試讀與沉浸式閱讀體驗。",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
   openGraph: {
-    title: "燦燦烈日下｜有些人陪你長大，有些人教你告別",
-    description: "友情、初戀與十年重逢，共同構成一個人的青春。",
+    title: "允生作品｜故事從這裡出生",
+    description: "允生的原創小說、作品專頁與網頁閱讀體驗。",
     type: "website",
     images: [{ url: "/casting-concept-ensemble.png", width: 1672, height: 942 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "燦燦烈日下｜NINI 長篇小說",
-    description: "一部關於友情、初戀與十年重逢的青春成長小說。",
+    title: "允生作品｜原創小說與網頁閱讀",
+    description: "每一部作品，都有自己的入口。",
     images: ["/casting-concept-ensemble.png"],
   },
 };

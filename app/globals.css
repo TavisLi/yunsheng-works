@@ -27,7 +27,85 @@ body {
 a { color: inherit; text-decoration: none; }
 img { display: block; width: 100%; }
 button, a { -webkit-tap-highlight-color: transparent; }
-a:focus-visible { outline: 3px solid var(--red); outline-offset: 5px; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--red); outline-offset: 5px; }
+
+.brandHome { min-height: 100svh; color: var(--jasmine); background: var(--night); }
+.brandNav { position: absolute; z-index: 10; top: 0; left: 0; width: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 26px 4vw; font-size: 10px; letter-spacing: .18em; }
+.brandNav > span { justify-self: end; font: 600 9px/1.2 "Courier New", monospace; }
+.brandWordmark { font-family: var(--serif); font-size: 19px; font-weight: 700; letter-spacing: .18em; }
+.brandHero { position: relative; isolation: isolate; min-height: 100svh; overflow: hidden; display: grid; place-items: center; padding: 130px 6vw 90px; }
+.brandHero::before { content: ""; position: absolute; z-index: -2; inset: 0; opacity: .2; background: repeating-linear-gradient(90deg, transparent 0 calc(8.333vw - 1px), rgba(255,249,233,.16) calc(8.333vw - 1px) 8.333vw); }
+.brandHero::after { content: ""; position: absolute; z-index: -1; top: -28vw; right: -12vw; width: 72vw; height: 72vw; border-radius: 50%; background: radial-gradient(circle at 38% 38%, #fff6bd 0, var(--sun-light) 28%, var(--sun) 64%, #d48b20 100%); box-shadow: 0 0 120px rgba(246,183,60,.3); animation: sunBreath 9s ease-in-out infinite; }
+.brandSeal { position: absolute; z-index: 0; top: 50%; right: 7vw; width: min(48vw, 650px); aspect-ratio: 1; border: 1px solid rgba(20,42,56,.38); border-radius: 50%; display: grid; place-items: center; color: rgba(20,42,56,.86); transform: translateY(-46%); }
+.brandSeal::before,.brandSeal::after { content: ""; position: absolute; background: rgba(20,42,56,.28); }
+.brandSeal::before { width: 118%; height: 1px; }
+.brandSeal::after { width: 1px; height: 118%; }
+.brandSeal span { font-family: var(--serif); font-size: clamp(180px, 28vw, 430px); font-weight: 800; line-height: 1; transform: translateY(-.03em); }
+.brandIntro { position: relative; z-index: 2; justify-self: start; max-width: 690px; }
+.brandIntro h1 { max-width: 6em; margin: 0; font-family: var(--serif); font-size: clamp(72px, 10vw, 154px); font-weight: 600; line-height: .98; letter-spacing: -.07em; }
+.brandIntro > p:not(.eyebrow) { max-width: 500px; margin: 35px 0 0; color: rgba(255,249,233,.75); font-size: 15px; line-height: 2; }
+.brandJump { display: inline-flex; gap: 44px; align-items: center; margin-top: 42px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,249,233,.55); font-size: 12px; letter-spacing: .16em; }
+.brandMarginNote { position: absolute; left: 4vw; bottom: 35px; margin: 0; color: rgba(255,249,233,.5); font: 600 9px/1.8 "Courier New", monospace; letter-spacing: .16em; }
+.brandWorks { padding: 120px 6vw 135px; color: var(--ink); background: var(--jasmine); }
+.brandWorksHeader { display: grid; grid-template-columns: 1fr .55fr; gap: 9vw; align-items: end; padding-bottom: 65px; }
+.brandWorksHeader h2 { margin: 18px 0 0; font-family: var(--serif); font-size: clamp(52px, 6.5vw, 100px); font-weight: 600; line-height: 1.12; letter-spacing: -.045em; }
+.brandWorksHeader > p { max-width: 500px; margin: 0 0 10px; color: rgba(23,42,50,.72); font-size: 15px; line-height: 2; }
+.brandWorkCard { display: grid; grid-template-columns: 1.12fr .88fr; min-height: 570px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.brandWorkImage { position: relative; overflow: hidden; min-height: 520px; background: var(--uniform); }
+.brandWorkImage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 45%, rgba(246,183,60,.42)); pointer-events: none; }
+.brandWorkImage img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.brandWorkImage:hover img { transform: scale(1.025); }
+.brandWorkImage span { position: absolute; z-index: 2; left: 20px; top: 20px; padding: 9px 11px; color: var(--jasmine); background: var(--red); font: 700 9px/1 "Courier New", monospace; letter-spacing: .15em; }
+.brandWorkCopy { align-self: center; padding: 60px clamp(35px,5vw,85px); }
+.brandWorkCopy > p:first-child { margin: 0; color: var(--uniform); font: 600 10px/1 "Courier New", monospace; letter-spacing: .17em; }
+.brandWorkCopy h3 { margin: 20px 0 26px; font-family: var(--serif); font-size: clamp(54px, 6vw, 92px); line-height: 1; letter-spacing: -.055em; }
+.brandWorkCopy blockquote { margin: 0; font-family: var(--serif); font-size: 24px; line-height: 1.55; }
+.brandWorkSummary { margin: 26px 0 32px; color: rgba(23,42,50,.7); font-size: 14px; line-height: 2; }
+.brandWorkButton { color: var(--jasmine); }
+.brandFooter { display: flex; justify-content: space-between; padding: 24px 4vw; font-size: 10px; letter-spacing: .14em; }
+
+.readerPage { --reader-bg: #fff9e9; --reader-text: #172a32; --reader-muted: rgba(23,42,50,.58); --reader-panel: rgba(255,244,214,.92); min-height: 100svh; color: var(--reader-text); background: var(--reader-bg); transition: color .2s ease, background .2s ease; }
+.readerPage[data-theme="night"] { --reader-bg: #10232f; --reader-text: #f7edcf; --reader-muted: rgba(247,237,207,.62); --reader-panel: rgba(20,42,56,.96); }
+.readerTopbar { position: fixed; z-index: 20; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 22px 3vw; color: var(--reader-muted); background: linear-gradient(var(--reader-bg) 58%, transparent); font: 600 10px/1.2 "Courier New", monospace; letter-spacing: .13em; }
+.readerTopbar a { color: var(--reader-text); }
+.readerControls { position: fixed; z-index: 25; right: 3vw; top: 72px; display: flex; gap: 8px; padding: 8px; border: 1px solid color-mix(in srgb, var(--reader-text) 16%, transparent); background: var(--reader-panel); box-shadow: 0 12px 35px color-mix(in srgb, var(--night) 12%, transparent); }
+.fontControls { display: flex; border: 1px solid color-mix(in srgb, var(--reader-text) 17%, transparent); }
+.readerControls button { min-width: 42px; border: 0; padding: 10px 11px; color: var(--reader-text); background: transparent; cursor: pointer; font-family: var(--sans); font-size: 11px; }
+.fontControls button + button { border-left: 1px solid color-mix(in srgb, var(--reader-text) 17%, transparent); }
+.readerControls button[aria-pressed="true"] { color: var(--reader-bg); background: var(--reader-text); }
+.themeControl { border: 1px solid color-mix(in srgb, var(--reader-text) 17%, transparent) !important; }
+.readerArticle { width: min(100% - 40px, 760px); margin: 0 auto; padding: 170px 0 190px; }
+.readerArticle > header { padding-bottom: 55px; border-bottom: 1px solid color-mix(in srgb, var(--reader-text) 18%, transparent); text-align: center; }
+.readerArticle > header p { margin: 0 0 30px; color: var(--reader-muted); font: 600 10px/1 "Courier New", monospace; letter-spacing: .18em; }
+.readerArticle > header h1 { margin: 0; font-family: var(--serif); font-size: clamp(48px, 7vw, 82px); font-weight: 600; line-height: 1.15; letter-spacing: -.035em; }
+.readerArticle > header span { display: block; margin-top: 22px; color: var(--reader-muted); font-family: var(--serif); font-size: 15px; letter-spacing: .12em; }
+.readerProse { padding: 85px 0 60px; font-family: var(--serif); line-height: 2.15; letter-spacing: .025em; }
+.readerProse p { scroll-margin-top: 120px; margin: 0; }
+.readerProse p + p { margin-top: 2em; }
+.font-small .readerProse { font-size: 17px; }
+.font-standard .readerProse { font-size: 20px; }
+.font-large .readerProse { font-size: 24px; }
+.readerProse p:first-child::first-letter { float: left; margin: .08em .12em 0 0; color: var(--sun); font-size: 4.25em; font-weight: 700; line-height: .74; }
+.previewEnd { margin-top: 70px; padding: 52px 0 0; border-top: 1px solid color-mix(in srgb, var(--reader-text) 18%, transparent); text-align: center; }
+.previewEnd > span { color: var(--red); font: 700 10px/1 "Courier New", monospace; letter-spacing: .16em; }
+.previewEnd h2 { margin: 24px 0 18px; font-family: var(--serif); font-size: 32px; font-weight: 600; }
+.previewEnd p { margin: 0 auto; max-width: 530px; color: var(--reader-muted); font-size: 13px; line-height: 1.9; }
+.previewEnd a { display: inline-block; margin-top: 28px; border-bottom: 1px solid currentColor; padding: 8px 0; font-size: 12px; font-weight: 700; letter-spacing: .1em; }
+.readerProgress { position: fixed; z-index: 20; left: 3vw; bottom: 24px; display: grid; grid-template-columns: auto minmax(80px,180px) 34px; gap: 12px; align-items: center; color: var(--reader-muted); font: 600 9px/1 "Courier New", monospace; letter-spacing: .12em; }
+.readerProgress progress { width: 100%; height: 2px; border: 0; appearance: none; background: color-mix(in srgb, var(--reader-text) 15%, transparent); }
+.readerProgress progress::-webkit-progress-bar { background: color-mix(in srgb, var(--reader-text) 15%, transparent); }
+.readerProgress progress::-webkit-progress-value { background: var(--sun); }
+.readerProgress progress::-moz-progress-bar { background: var(--sun); }
+.readerProgress strong { color: var(--reader-text); font-weight: 700; }
+
+.lockedChapterPage { min-height: 100svh; padding: 30px 4vw; color: var(--jasmine); background: var(--night); }
+.lockedChapterPage > a { font-size: 11px; letter-spacing: .1em; }
+.lockedChapterPage > div { min-height: calc(100svh - 90px); display: flex; flex-direction: column; align-items: center; justify-content: center; max-width: 720px; margin: 0 auto; text-align: center; }
+.lockedChapterPage p { margin: 0 0 24px; color: var(--sun); font: 700 10px/1 "Courier New", monospace; letter-spacing: .17em; }
+.lockedChapterPage h1 { margin: 0; font-family: var(--serif); font-size: clamp(62px, 9vw, 120px); font-weight: 600; }
+.lockedChapterPage strong { margin-top: 35px; font-family: var(--serif); font-size: 24px; font-weight: 600; }
+.lockedChapterPage > div > span { max-width: 530px; margin-top: 15px; color: rgba(255,249,233,.65); font-size: 13px; line-height: 1.9; }
+.lockedChapterPage .primaryButton { margin-top: 35px; color: var(--night); background: var(--sun); border-color: var(--sun); }
 
 .nav {
   position: absolute;
@@ -134,6 +212,19 @@ a:focus-visible { outline: 3px solid var(--red); outline-offset: 5px; }
 .castNames strong { font-size: 24px; letter-spacing: .08em; }
 .disclaimer { margin: 27px 0 0; color: rgba(255,249,233,.68); font-size: 11px; line-height: 1.8; }
 
+.catalog { background: var(--jasmine); }
+.catalogHeader { display: grid; grid-template-columns: 1fr .52fr; gap: 9vw; align-items: end; margin: 72px 4vw 65px; }
+.catalogHeader h2 { margin: 20px 0 0; font-family: var(--serif); font-size: clamp(48px, 6vw, 92px); font-weight: 600; line-height: 1.15; letter-spacing: -.04em; }
+.catalogHeader > p { margin: 0 0 8px; color: rgba(23,42,50,.72); font-size: 14px; line-height: 2; }
+.chapterList { border-top: 1px solid var(--line); }
+.chapterRow { display: grid; grid-template-columns: 85px 1fr 180px 130px; gap: 3vw; align-items: center; min-height: 92px; border-bottom: 1px solid var(--line); }
+.chapterNumber { font: 700 10px/1 "Courier New", monospace; letter-spacing: .16em; }
+.chapterRow h3 { margin: 0; font-family: var(--serif); font-size: 27px; font-weight: 600; }
+.chapterStatus { color: rgba(23,42,50,.5); font-size: 11px; letter-spacing: .1em; }
+.chapterStatus.isOpen { color: var(--red); font-weight: 700; }
+.chapterRow a { justify-self: end; border-bottom: 1px solid currentColor; padding: 8px 0; font-size: 12px; font-weight: 700; letter-spacing: .1em; }
+.chapterUnavailable { justify-self: end; color: rgba(23,42,50,.3); }
+
 .closing { min-height: 80svh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: radial-gradient(circle at 50% 25%, #ffe19b, var(--sun) 55%, #d98f23); }
 .closingEyebrow { font: 600 10px/1.2 "Courier New", monospace; letter-spacing: .2em; }
 .closing blockquote { margin: 45px 0 30px; font-family: var(--serif); font-size: clamp(48px, 7.5vw, 112px); line-height: 1.18; letter-spacing: -.04em; }
@@ -145,6 +236,11 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
 @keyframes noteFloat { 0%,100% { transform: rotate(-4deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-8px); } }
 
 @media (max-width: 1050px) {
+  .brandSeal { right: -10vw; width: 62vw; opacity: .8; }
+  .brandWorksHeader { grid-template-columns: 1fr; gap: 36px; }
+  .brandWorksHeader > p { max-width: 650px; }
+  .brandWorkCard { grid-template-columns: 1fr; }
+  .brandWorkImage { min-height: 500px; }
   .hero { grid-template-columns: 1fr; align-content: center; padding-top: 115px; }
   .heroCopy { max-width: 600px; }
   .hero h1 { font-size: clamp(82px, 15vw, 140px); }
@@ -155,9 +251,29 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
   .castingArt { max-width: 850px; }
   .characterRow { grid-template-columns: 50px .5fr 1fr; }
   .characterRow p { grid-column: 3; }
+  .catalogHeader { grid-template-columns: 1fr; gap: 35px; }
+  .catalogHeader > p { max-width: 620px; }
 }
 
 @media (max-width: 720px) {
+  .brandNav { grid-template-columns: 1fr auto; padding: 20px; }
+  .brandNav > span { display: none; }
+  .brandHero { min-height: 780px; align-items: start; padding: 150px 20px 80px; }
+  .brandHero::before { background-size: 25vw 100%; }
+  .brandHero::after { top: 55vh; right: -55vw; width: 145vw; height: 145vw; }
+  .brandSeal { top: auto; right: -29vw; bottom: -5vw; width: 110vw; transform: none; }
+  .brandIntro h1 { max-width: 5em; font-size: clamp(67px, 21vw, 98px); }
+  .brandIntro > p:not(.eyebrow) { max-width: 82%; font-size: 13px; }
+  .brandMarginNote { display: none; }
+  .brandWorks { padding: 80px 20px 95px; }
+  .brandWorksHeader { padding-bottom: 48px; }
+  .brandWorksHeader h2 { font-size: 50px; }
+  .brandWorksHeader > p { font-size: 13px; }
+  .brandWorkCard { min-height: 0; }
+  .brandWorkImage { min-height: 310px; }
+  .brandWorkCopy { padding: 42px 6px 52px; }
+  .brandWorkCopy h3 { font-size: 58px; }
+  .brandFooter { flex-direction: column; gap: 10px; padding: 22px 20px; }
   .nav { grid-template-columns: 1fr auto; padding: 20px; }
   .navLinks { display: none; }
   .navStatus { font-size: 9px; }
@@ -190,6 +306,24 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
   .casting { gap: 55px; }
   .castingCopy h2 { margin: 42px 0 32px; font-size: 54px; }
   .castNames strong { font-size: 20px; }
+  .catalogHeader { margin: 52px 0 45px; }
+  .catalogHeader h2 { font-size: 48px; }
+  .chapterRow { grid-template-columns: 46px 1fr auto; gap: 10px 16px; min-height: 100px; padding: 16px 0; }
+  .chapterRow h3 { font-size: 23px; }
+  .chapterStatus { grid-column: 2; }
+  .chapterRow a,.chapterUnavailable { grid-column: 3; grid-row: 1 / span 2; align-self: center; }
+  .readerTopbar { padding: 18px 20px; }
+  .readerTopbar > span { display: none; }
+  .readerControls { top: 58px; right: 12px; }
+  .readerControls button { min-width: 36px; padding: 9px 8px; }
+  .readerArticle { width: min(100% - 40px, 620px); padding-top: 165px; }
+  .readerArticle > header { padding-bottom: 42px; }
+  .readerProse { padding-top: 60px; }
+  .font-small .readerProse { font-size: 16px; }
+  .font-standard .readerProse { font-size: 18px; }
+  .font-large .readerProse { font-size: 21px; }
+  .readerProgress { left: 20px; right: 20px; bottom: 15px; grid-template-columns: auto 1fr 32px; padding: 10px 12px; background: var(--reader-panel); }
+  .lockedChapterPage { padding: 24px 20px; }
   .closing { min-height: 720px; }
   .closing blockquote { font-size: 52px; }
   footer { flex-direction: column; gap: 10px; }
