@@ -159,7 +159,9 @@ export default function ReaderShell({
           ))}
         </div>
         <footer className="previewEnd">
-          <span>試讀內容到這裡</span>
+          <span>
+            {readingKind === "introduction" ? "公開前導到這裡" : "試讀內容到這裡"}
+          </span>
           <h2>正式章節正在逐章校對。</h2>
           <p>本頁只包含已公開的作品前導；完整手稿與未公開章節不會傳送到瀏覽器。</p>
           <a href={`/works/${workSlug}#catalog`}>返回章節目錄</a>

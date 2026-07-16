@@ -8,6 +8,7 @@ type StoredChapter = {
   order: number;
   slug: string;
   title: string;
+  contentVersion: number;
   sourceParagraphs?: ReadonlyArray<Paragraph>;
 };
 
@@ -24,6 +25,7 @@ type StoredWork = {
     id: string;
     slug: string;
     title: string;
+    contentVersion: number;
     paragraphs: ReadonlyArray<Paragraph>;
   };
   chapters: ReadonlyArray<StoredChapter>;
@@ -34,6 +36,7 @@ export type PublicCatalogEntry = {
   number: string;
   slug: string;
   title: string;
+  contentVersion: number;
   kind: "introduction" | "chapter";
   availability: "public" | ChapterAvailability;
 };
@@ -65,6 +68,7 @@ const works: ReadonlyArray<StoredWork> = [
       id: "intro_cancan_lierixia",
       slug: "prologue",
       title: "作品前導",
+      contentVersion: 1,
       paragraphs: [
         {
           id: "summer-begins",
@@ -86,12 +90,14 @@ const works: ReadonlyArray<StoredWork> = [
         order: 1,
         slug: "chapter-01",
         title: "第一章",
+        contentVersion: 1,
       },
       {
         id: "chapter_002_cancan_lierixia",
         order: 2,
         slug: "chapter-02",
         title: "第二章",
+        contentVersion: 1,
         // Synthetic sentinel proves locked server content never reaches a response.
         sourceParagraphs: [
           {
@@ -105,6 +111,7 @@ const works: ReadonlyArray<StoredWork> = [
         order: 3,
         slug: "chapter-03",
         title: "第三章",
+        contentVersion: 1,
       },
     ],
   },
@@ -147,6 +154,7 @@ export function getPublicWork(slug: string): PublicWork | undefined {
       number: "前導",
       slug: work.introduction.slug,
       title: work.introduction.title,
+      contentVersion: work.introduction.contentVersion,
       kind: "introduction",
       availability: "public",
     },
@@ -155,6 +163,7 @@ export function getPublicWork(slug: string): PublicWork | undefined {
       number: String(chapter.order).padStart(2, "0"),
       slug: chapter.slug,
       title: chapter.title,
+      contentVersion: chapter.contentVersion,
       kind: "chapter" as const,
       availability: getChapterAvailability(work, chapter),
     })),
@@ -174,6 +183,7 @@ export function getPublicReading(
       number: "前導",
       slug: work.introduction.slug,
       title: work.introduction.title,
+      contentVersion: work.introduction.contentVersion,
       kind: "introduction",
       availability: "public",
       paragraphs: work.introduction.paragraphs,
@@ -189,6 +199,7 @@ export function getPublicReading(
     number: String(chapter.order).padStart(2, "0"),
     slug: chapter.slug,
     title: chapter.title,
+    contentVersion: chapter.contentVersion,
     kind: "chapter",
     availability,
     paragraphs: availability === "preview" ? chapter.sourceParagraphs : undefined,

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
-import { isWithinPreviewLimit } from "../app/content/works.ts";
+import { getPublicWork, isWithinPreviewLimit } from "../app/content/works.ts";
 import {
   parseStoredReaderState,
   serializeReaderState,
@@ -67,6 +67,9 @@ test("server-renders the public prologue in the web reader", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>作品前導｜燦燦烈日下<\/title>/i);
+  assert.match(html, /PUBLIC INTRODUCTION · 公開前導/);
+  assert.match(html, /公開前導到這裡/);
+  assert.doesNotMatch(html, /FREE PREVIEW|試讀內容到這裡/);
   assert.match(html, /何念恩和許承恩從彼此的少年時代穿過/);
   assert.match(html, /aria-label="閱讀設定"/);
   assert.match(html, />小<\/button>/);
@@ -95,6 +98,9 @@ test("preview chapter limits allow only the configured first one to three chapte
     }
   }
   assert.equal(isWithinPreviewLimit(1, 0), false);
+  const work = getPublicWork("cancan-lierixia");
+  assert.equal(work?.introduction.contentVersion, 1);
+  assert.ok(work?.chapters.every(({ contentVersion }) => contentVersion === 1));
 });
 
 test("reader state keeps the latest chapter, position, preferences and update time", () => {
