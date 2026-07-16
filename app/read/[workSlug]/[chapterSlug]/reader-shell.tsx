@@ -1,23 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-type FontSize = "small" | "standard" | "large";
-type ReaderTheme = "day" | "night";
+import {
+  parseStoredReaderState,
+  serializeReaderState,
+  type FontSize,
+  type ReaderTheme,
+} from "../../reader-state";
 
 type ReaderShellProps = {
   workSlug: string;
   workTitle: string;
+  chapterSlug: string;
   chapterTitle: string;
+  readingKind: "introduction" | "chapter";
   paragraphs: ReadonlyArray<{ id: string; text: string }>;
-};
-
-type StoredReaderState = {
-  version: 1;
-  fontSize: FontSize;
-  theme: ReaderTheme;
-  anchor?: string;
-  progress: number;
 };
 
 const fontSizes: ReadonlyArray<{ value: FontSize; label: string }> = [
@@ -26,21 +23,12 @@ const fontSizes: ReadonlyArray<{ value: FontSize; label: string }> = [
   { value: "large", label: "大" },
 ];
 
-function isStoredReaderState(value: unknown): value is StoredReaderState {
-  if (!value || typeof value !== "object") return false;
-  const state = value as Partial<StoredReaderState>;
-  return (
-    state.version === 1 &&
-    fontSizes.some(({ value: fontSize }) => fontSize === state.fontSize) &&
-    (state.theme === "day" || state.theme === "night") &&
-    typeof state.progress === "number"
-  );
-}
-
 export default function ReaderShell({
   workSlug,
   workTitle,
+  chapterSlug,
   chapterTitle,
+  readingKind,
   paragraphs,
 }: ReaderShellProps) {
   const storageKey = `yunsheng-reader:${workSlug}`;
@@ -53,14 +41,19 @@ export default function ReaderShell({
     const frame = window.requestAnimationFrame(() => {
       try {
         const stored = window.localStorage.getItem(storageKey);
-        const parsed: unknown = stored ? JSON.parse(stored) : null;
+        const parsed = parseStoredReaderState(stored);
 
-        if (isStoredReaderState(parsed)) {
+        if (parsed) {
           setFontSize(parsed.fontSize);
           setTheme(parsed.theme);
-          setProgress(Math.min(100, Math.max(0, Math.round(parsed.progress))));
+          const isCurrentChapter = parsed.chapterSlug === chapterSlug;
+          setProgress(
+            isCurrentChapter
+              ? Math.min(100, Math.max(0, Math.round(parsed.progress)))
+              : 0,
+          );
 
-          window.requestAnimationFrame(() => {
+          if (isCurrentChapter) window.requestAnimationFrame(() => {
             const anchor = parsed.anchor && document.getElementById(parsed.anchor);
             if (anchor) {
               anchor.scrollIntoView({ block: "start" });
@@ -78,7 +71,7 @@ export default function ReaderShell({
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [storageKey]);
+  }, [chapterSlug, storageKey]);
 
   useEffect(() => {
     if (!ready) return;
@@ -97,13 +90,13 @@ export default function ReaderShell({
       setProgress(roundedProgress);
       window.localStorage.setItem(
         storageKey,
-        JSON.stringify({
-          version: 1,
+        serializeReaderState({
+          chapterSlug,
           fontSize,
           theme,
           anchor: visibleParagraph?.id,
           progress: roundedProgress,
-        } satisfies StoredReaderState),
+        }),
       );
     };
     const onScroll = () => {
@@ -116,7 +109,7 @@ export default function ReaderShell({
       window.removeEventListener("scroll", onScroll);
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [fontSize, paragraphs, ready, storageKey, theme]);
+  }, [chapterSlug, fontSize, paragraphs, ready, storageKey, theme]);
 
   return (
     <main className={`readerPage font-${fontSize}`} data-theme={theme}>
@@ -152,7 +145,11 @@ export default function ReaderShell({
 
       <article className="readerArticle">
         <header>
-          <p>FREE PREVIEW · 免費試讀</p>
+          <p>
+            {readingKind === "introduction"
+              ? "PUBLIC INTRODUCTION · 公開前導"
+              : "FREE PREVIEW · 免費試讀"}
+          </p>
           <h1>{chapterTitle}</h1>
           <span>{workTitle}</span>
         </header>

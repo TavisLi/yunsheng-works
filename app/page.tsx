@@ -1,3 +1,15 @@
+import { getPublicWork } from "./content/works";
+
+function getFirstWork() {
+  const configuredWork = getPublicWork("cancan-lierixia");
+  if (!configuredWork) {
+    throw new Error("First public work configuration is missing");
+  }
+  return configuredWork;
+}
+
+const firstWork = getFirstWork();
+
 export default function Home() {
   return (
     <main className="brandHome">
@@ -36,7 +48,7 @@ export default function Home() {
             <h2 id="works-title">每個故事，<br />都有自己的入口。</h2>
           </div>
           <p>
-            《燦燦烈日下》是允生的第一部作品。往後的每一部小說，
+            《{firstWork.title}》是允生的第一部作品。往後的每一部小說，
             都會在這裡擁有獨立、完整而可長久保存的網頁。
           </p>
         </header>
@@ -46,18 +58,17 @@ export default function Home() {
             {/* Keep the original public artwork path; vinext serves it directly without a loader. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/casting-concept-ensemble.png"
-              alt="四位少年站在盛夏校園走廊的《燦燦烈日下》手繪概念圖"
+              src={firstWork.cover.src}
+              alt={firstWork.cover.alt}
             />
             <span>WORK 001</span>
           </a>
           <div className="brandWorkCopy">
-            <p>長篇小說 · 創作中</p>
-            <h3>燦燦烈日下</h3>
+            <p>{firstWork.publicationStatus}</p>
+            <h3>{firstWork.title}</h3>
             <blockquote>有些人陪你長大，有些人教你告別。</blockquote>
             <p className="brandWorkSummary">
-              一部關於友情、初戀與十年重逢的青春成長小說。
-              在最明亮的夏天，他們學會接受失去，仍然選擇靠近。
+              {firstWork.synopsis}
             </p>
             <a className="primaryButton brandWorkButton" href="/works/cancan-lierixia">
               進入作品 <span aria-hidden="true">↗</span>

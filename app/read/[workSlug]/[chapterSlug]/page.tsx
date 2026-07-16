@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPublicChapter, getPublicWork } from "../../../content/works";
+import { getPublicReading, getPublicWork } from "../../../content/works";
 import ReaderShell from "./reader-shell";
 
 type ReaderPageProps = {
@@ -10,7 +10,7 @@ type ReaderPageProps = {
 export async function generateMetadata({ params }: ReaderPageProps): Promise<Metadata> {
   const { workSlug, chapterSlug } = await params;
   const work = getPublicWork(workSlug);
-  const chapter = getPublicChapter(workSlug, chapterSlug);
+  const chapter = getPublicReading(workSlug, chapterSlug);
 
   if (!work || !chapter) return { title: "找不到試讀內容｜允生作品" };
   return {
@@ -22,13 +22,16 @@ export async function generateMetadata({ params }: ReaderPageProps): Promise<Met
 export default async function ReaderPage({ params }: ReaderPageProps) {
   const { workSlug, chapterSlug } = await params;
   const work = getPublicWork(workSlug);
-  const chapter = getPublicChapter(workSlug, chapterSlug);
+  const chapter = getPublicReading(workSlug, chapterSlug);
 
   if (!work || !chapter) {
     notFound();
   }
 
-  if (!chapter.paragraphs || chapter.availability !== "preview") {
+  if (
+    !chapter.paragraphs ||
+    (chapter.availability !== "public" && chapter.availability !== "preview")
+  ) {
     return (
       <main className="lockedChapterPage">
         <a href={`/works/${work.slug}#catalog`}>← 返回《{work.title}》目錄</a>
@@ -49,7 +52,9 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
     <ReaderShell
       workSlug={work.slug}
       workTitle={work.title}
+      chapterSlug={chapter.slug}
       chapterTitle={chapter.title}
+      readingKind={chapter.kind}
       paragraphs={chapter.paragraphs}
     />
   );

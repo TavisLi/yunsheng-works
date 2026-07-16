@@ -15,6 +15,7 @@ function getCancanWork() {
 }
 
 const work = getCancanWork();
+const catalogEntries = [work.introduction, ...work.chapters];
 
 const characters = [
   {
@@ -85,7 +86,7 @@ export default function Home() {
           <a href="#casting">概念選角</a>
           <a href="#catalog">試讀</a>
         </div>
-        <span className="navStatus">長篇小說 · 創作中</span>
+        <span className="navStatus">{work.publicationStatus}</span>
       </nav>
 
       <section className="hero" id="top">
@@ -237,11 +238,14 @@ export default function Home() {
           </p>
         </div>
         <div className="chapterList" aria-label={`${work.title}章節目錄`}>
-          {work.chapters.map((chapter) => {
-            const isPreview = chapter.availability === "preview";
-            const status = isPreview
-              ? "免費閱讀"
-              : chapter.availability === "preparing"
+          {catalogEntries.map((chapter) => {
+            const isReadable =
+              chapter.availability === "public" || chapter.availability === "preview";
+            const status = chapter.availability === "public"
+              ? "公開閱讀"
+              : chapter.availability === "preview"
+                ? "免費試讀"
+                : chapter.availability === "preparing"
                 ? "正式試讀整理中"
                 : "尚未開放";
 
@@ -249,10 +253,10 @@ export default function Home() {
               <article className="chapterRow" key={chapter.slug}>
                 <span className="chapterNumber">{chapter.number}</span>
                 <h3>{chapter.title}</h3>
-                <span className={`chapterStatus ${isPreview ? "isOpen" : ""}`}>
+                <span className={`chapterStatus ${isReadable ? "isOpen" : ""}`}>
                   {status}
                 </span>
-                {isPreview ? (
+                {isReadable ? (
                   <a href={`/read/${work.slug}/${chapter.slug}`}>
                     開始閱讀 <span aria-hidden="true">→</span>
                   </a>

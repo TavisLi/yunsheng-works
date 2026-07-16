@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
+import { isWithinPreviewLimit } from "../app/content/works.ts";
+import {
+  parseStoredReaderState,
+  serializeReaderState,
+} from "../app/read/reader-state.ts";
 
 async function render(pathname = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -27,7 +32,10 @@ test("server-renders the Yunsheng Works brand home with its first work", async (
   assert.match(html, /<link rel="icon" href="\/favicon\.svg"/i);
   assert.match(html, /允生作品/);
   assert.match(html, /故事從這裡出生/);
-  assert.match(html, /《燦燦烈日下》是允生的第一部作品/);
+  assert.match(
+    html,
+    /《(?:<!-- -->)?燦燦烈日下(?:<!-- -->)?》是允生的第一部作品/,
+  );
   assert.match(html, /href="\/works\/cancan-lierixia"/);
   assert.match(html, /casting-concept-ensemble\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
@@ -70,14 +78,45 @@ test("server-renders the public prologue in the web reader", async () => {
 });
 
 test("does not send chapter text for a chapter that is not open", async () => {
-  const response = await render("/read/cancan-lierixia/chapter-01");
+  const response = await render("/read/cancan-lierixia/chapter-02");
   assert.equal(response.status, 200);
 
   const html = await response.text();
-  assert.match(html, /正式試讀整理中/);
+  assert.match(html, /本章尚未開放/);
   assert.match(html, /尚未向瀏覽器提供這一章的正文/);
-  assert.doesNotMatch(html, /何念恩和許承恩從彼此的少年時代穿過/);
+  assert.doesNotMatch(html, /SERVER_ONLY_LOCKED_CHAPTER_SENTINEL_7F3A/);
   assert.doesNotMatch(html, /readerProse/);
+});
+
+test("preview chapter limits allow only the configured first one to three chapters", () => {
+  for (const limit of [1, 2, 3]) {
+    for (let order = 1; order <= 4; order += 1) {
+      assert.equal(isWithinPreviewLimit(limit, order), order <= limit);
+    }
+  }
+  assert.equal(isWithinPreviewLimit(1, 0), false);
+});
+
+test("reader state keeps the latest chapter, position, preferences and update time", () => {
+  const serialized = serializeReaderState({
+    chapterSlug: "prologue",
+    fontSize: "large",
+    theme: "night",
+    anchor: "ten-years-later",
+    progress: 73,
+    updatedAt: "2026-07-16T10:00:00.000Z",
+  });
+
+  assert.deepEqual(parseStoredReaderState(serialized), {
+    version: 1,
+    chapterSlug: "prologue",
+    fontSize: "large",
+    theme: "night",
+    anchor: "ten-years-later",
+    progress: 73,
+    updatedAt: "2026-07-16T10:00:00.000Z",
+  });
+  assert.equal(parseStoredReaderState("{not-json"), null);
 });
 
 test("starter preview is removed from the finished site", async () => {
