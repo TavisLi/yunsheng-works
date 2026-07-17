@@ -54,6 +54,7 @@ test("server-renders the dedicated Cancan Lierixia work page", async () => {
   assert.match(html, /scene-detail-01-dorm-after-lights-v3\.webp/);
   assert.match(html, /scene-detail-02-farewell-song-v2\.webp/);
   assert.match(html, /scene-detail-03-time-capsule-reunion-v2\.webp/);
+  assert.match(html, /casting-concept-ensemble-v2\.webp/);
   assert.match(html, /href="\/works\/cancan-lierixia\/scenes\/dorm-after-lights"/);
   assert.match(html, /href="\/works\/cancan-lierixia\/scenes\/farewell-song"/);
   assert.match(html, /href="\/works\/cancan-lierixia\/scenes\/time-capsule-reunion"/);

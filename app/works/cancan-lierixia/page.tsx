@@ -180,8 +180,8 @@ export default function Home() {
       <section className="casting section" id="casting">
         <div className="castingArt">
           <img
-            src="/casting-concept-ensemble.png"
-            alt="趙今麥、周翊然、孫千與王安宇演繹四位小說角色的非官方手繪概念圖"
+            src="/casting-concept-ensemble-v2.webp"
+            alt="趙今麥、周翊然、孫千與王安宇分別置於校園黃昏與城市雨夜的非官方電影海報式概念圖"
           />
           <span className="artStamp">READER&apos;S DREAM CAST</span>
         </div>
