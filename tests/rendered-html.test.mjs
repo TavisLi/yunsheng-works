@@ -58,7 +58,9 @@ test("server-renders the dedicated Cancan Lierixia work page", async () => {
   assert.match(html, /id="catalog"/);
   assert.match(html, /作品前導/);
   assert.match(html, /href="\/read\/cancan-lierixia\/prologue"/);
-  assert.match(html, /正式試讀整理中/);
+  assert.match(html, /第一章｜致一如初見的你們/);
+  assert.match(html, /href="\/read\/cancan-lierixia\/chapter-01"/);
+  assert.match(html, /免費試讀/);
 });
 
 test("server-renders the public prologue in the web reader", async () => {
@@ -78,6 +80,19 @@ test("server-renders the public prologue in the web reader", async () => {
   assert.match(html, /夜間模式/);
   assert.match(html, /閱讀進度/);
   assert.match(html, /href="\/works\/cancan-lierixia"/);
+});
+
+test("server-renders the complete approved first chapter as a free preview", async () => {
+  const response = await render("/read/cancan-lierixia/chapter-01");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /<title>第一章｜致一如初見的你們｜燦燦烈日下<\/title>/i);
+  assert.match(html, /FREE PREVIEW · 免費試讀/);
+  assert.match(html, /月上樹梢，校園安靜的只剩下蟬鳴聲。/);
+  assert.match(html, /嗯，討厭的青梅竹馬。/);
+  assert.match(html, /本頁只包含作者核准公開的免費試讀章節/);
+  assert.doesNotMatch(html, /正式試讀整理中/);
 });
 
 test("does not send chapter text for a chapter that is not open", async () => {
@@ -100,7 +115,10 @@ test("preview chapter limits allow only the configured first one to three chapte
   assert.equal(isWithinPreviewLimit(1, 0), false);
   const work = getPublicWork("cancan-lierixia");
   assert.equal(work?.introduction.contentVersion, 1);
-  assert.ok(work?.chapters.every(({ contentVersion }) => contentVersion === 1));
+  assert.deepEqual(
+    work?.chapters.map(({ contentVersion }) => contentVersion),
+    [2, 1, 1],
+  );
 });
 
 test("reader state keeps the latest chapter, position, preferences and update time", () => {

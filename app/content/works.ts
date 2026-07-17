@@ -1,3 +1,5 @@
+import { cancanLierixiaChapterOne } from "./previews/cancan-lierixia-chapter-01.ts";
+
 export type PreviewChapterCount = 1 | 2 | 3;
 export type ChapterAvailability = "preview" | "preparing" | "locked";
 
@@ -89,8 +91,9 @@ const works: ReadonlyArray<StoredWork> = [
         id: "chapter_001_cancan_lierixia",
         order: 1,
         slug: "chapter-01",
-        title: "第一章",
-        contentVersion: 1,
+        title: "第一章｜致一如初見的你們",
+        contentVersion: 2,
+        sourceParagraphs: cancanLierixiaChapterOne,
       },
       {
         id: "chapter_002_cancan_lierixia",
