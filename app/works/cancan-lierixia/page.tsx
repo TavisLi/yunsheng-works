@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cancanScenes } from "../../content/scenes";
 import { getPublicWork } from "../../content/works";
 
 export const metadata: Metadata = {
@@ -41,33 +42,6 @@ const characters = [
     actor: "王安宇",
     role: "成年世界裡，安穩而清醒的答案",
     note: "他不負責取代誰。他讓人看見，成熟的愛可以不靠猜測，也不必用失去證明重量。",
-  },
-];
-
-const scenes = [
-  {
-    number: "01",
-    title: "宿舍熄燈之後",
-    copy: "一場偷偷進行的告別，把笑聲、酒氣與沒說完的真心留在盛夏夜裡。",
-    motif: "紙杯 · 走廊 · 少年心事",
-    image: "/scene-01-dorm-after-lights.jpg",
-    imageAlt: "熄燈後，女生們圍坐在宿舍地板分享零食與心事的手繪場景",
-  },
-  {
-    number: "02",
-    title: "隔樓唱起《送別》",
-    copy: "有人站在樓上，有人在樓下。歌聲越過欄杆，也越過再也回不去的年紀。",
-    motif: "夜色 · 合唱 · 畢業",
-    image: "/scene-02-farewell-song.jpg",
-    imageAlt: "畢業夜，學生們分站上下兩層宿舍走廊合唱送別的手繪場景",
-  },
-  {
-    number: "03",
-    title: "十年後，打開時間膠囊",
-    copy: "當年寫給未來的信終於重見陽光，他們才明白：青春沒有消失，只是換了一種方式留在身上。",
-    motif: "舊信 · 茉莉 · 重逢",
-    image: "/scene-03-time-capsule-reunion.jpg",
-    imageAlt: "十年後，四位朋友在樹下打開時間膠囊與舊信的手繪場景",
   },
 ];
 
@@ -152,23 +126,32 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="scenes section" aria-labelledby="scenes-title">
+      <section className="scenes section" id="scenes" aria-labelledby="scenes-title">
         <div className="sectionLabel light">
           <span>SCENES TO REMEMBER</span>
           <span>影視名場面</span>
         </div>
         <h2 id="scenes-title">把青春留在<br />最有光的地方</h2>
         <div className="sceneGrid">
-          {scenes.map((scene) => (
-            <article className="sceneCard" key={scene.number}>
-              <img className="sceneImage" src={scene.image} alt={scene.imageAlt} />
+          {cancanScenes.map((scene) => (
+            <a
+              className="sceneCard"
+              href={`/works/cancan-lierixia/scenes/${scene.slug}`}
+              aria-label={`閱讀場景：${scene.title}`}
+              key={scene.number}
+            >
+              <img
+                className="sceneImage"
+                src={scene.cardImage}
+                alt={scene.cardImageAlt}
+              />
               <span className="sceneNumber">{scene.number}</span>
               <div className="sceneContent">
                 <h3>{scene.title}</h3>
                 <p>{scene.copy}</p>
-                <small>{scene.motif}</small>
+                <small>{scene.motif} · 點擊閱讀</small>
               </div>
-            </article>
+            </a>
           ))}
         </div>
       </section>
@@ -233,8 +216,8 @@ export default function Home() {
             <h2 id="catalog-title">從公開的文字，<br />走進那個盛夏。</h2>
           </div>
           <p>
-            目前開放作品前導與作者核准的第一章免費試讀。其餘章節將在作者逐章確認後開放，
-            完整手稿不會放入網站或公開下載。
+            目前開放作品前導與第一章免費試讀，第二、第三章也將陸續開放。
+            小說第一冊電子書即將發行，敬請期待。
           </p>
         </div>
         <div className="chapterList" aria-label={`${work.title}章節目錄`}>

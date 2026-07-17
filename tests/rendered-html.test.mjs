@@ -54,6 +54,9 @@ test("server-renders the dedicated Cancan Lierixia work page", async () => {
   assert.match(html, /scene-01-dorm-after-lights\.jpg/);
   assert.match(html, /scene-02-farewell-song\.jpg/);
   assert.match(html, /scene-03-time-capsule-reunion\.jpg/);
+  assert.match(html, /href="\/works\/cancan-lierixia\/scenes\/dorm-after-lights"/);
+  assert.match(html, /href="\/works\/cancan-lierixia\/scenes\/farewell-song"/);
+  assert.match(html, /href="\/works\/cancan-lierixia\/scenes\/time-capsule-reunion"/);
   assert.match(html, /href="\/"[^>]*>允生作品<\/a>/);
   assert.match(html, /id="catalog"/);
   assert.match(html, /作品前導/);
@@ -61,6 +64,47 @@ test("server-renders the dedicated Cancan Lierixia work page", async () => {
   assert.match(html, /第一章｜致一如初見的你們/);
   assert.match(html, /href="\/read\/cancan-lierixia\/chapter-01"/);
   assert.match(html, /免費試讀/);
+  assert.match(html, /目前開放作品前導與第一章免費試讀/);
+  assert.match(html, /小說第一冊電子書即將發行，敬請期待/);
+  assert.doesNotMatch(html, /完整手稿不會放入網站或公開下載/);
+});
+
+test("server-renders all three illustrated scene excerpts", async () => {
+  const cases = [
+    {
+      path: "/works/cancan-lierixia/scenes/dorm-after-lights",
+      title: "宿舍熄燈之後",
+      image: "scene-detail-01-dorm-after-lights-v2.png",
+      source: "第一章節選 · 完稿內容",
+      excerpt: "宿舍樓裡早早陷入一片黑暗",
+    },
+    {
+      path: "/works/cancan-lierixia/scenes/farewell-song",
+      title: "隔樓唱起《送別》",
+      image: "scene-detail-02-farewell-song-v2.png",
+      source: "後續創作場景節選 · 草稿內容",
+      excerpt: "她就是突然想喊他的名字",
+    },
+    {
+      path: "/works/cancan-lierixia/scenes/time-capsule-reunion",
+      title: "十年後，打開時間膠囊",
+      image: "scene-detail-03-time-capsule-reunion-v2.png",
+      source: "後續創作場景節選 · 草稿內容",
+      excerpt: "何念恩到的時候，時間膠囊已經都被挖出來了",
+    },
+  ];
+
+  for (const scene of cases) {
+    const response = await render(scene.path);
+    assert.equal(response.status, 200);
+
+    const html = await response.text();
+    assert.ok(html.includes(scene.title));
+    assert.ok(html.includes(scene.image));
+    assert.ok(html.includes(scene.source));
+    assert.ok(html.includes(scene.excerpt));
+    assert.match(html, /href="\/works\/cancan-lierixia#scenes"/);
+  }
 });
 
 test("server-renders the public prologue in the web reader", async () => {

@@ -176,18 +176,47 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--red); outline-o
 .scenes { color: var(--jasmine); background: var(--night); }
 .scenes h2 { margin: 65px 0 55px; font-family: var(--serif); font-size: clamp(54px, 7vw, 110px); font-weight: 600; line-height: 1.08; letter-spacing: -.04em; }
 .sceneGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,249,233,.25); }
-.sceneCard { position: relative; min-height: 520px; overflow: hidden; padding: 25px; background: var(--night); isolation: isolate; }
+.sceneCard { position: relative; display: block; min-height: 520px; overflow: hidden; padding: 25px; color: inherit; background: var(--night); text-decoration: none; isolation: isolate; }
 .sceneCard::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(10,28,40,.05) 28%, rgba(9,24,35,.35) 58%, rgba(8,22,32,.94) 100%); }
 .sceneImage { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .7s cubic-bezier(.2,.7,.2,1), filter .7s ease; }
 .sceneCard:nth-child(1) .sceneImage { object-position: 50% 58%; }
 .sceneCard:nth-child(2) .sceneImage { object-position: 50% 45%; }
 .sceneCard:nth-child(3) .sceneImage { object-position: 50% 48%; }
 .sceneCard:hover .sceneImage { transform: scale(1.045); filter: saturate(1.08); }
+.sceneCard:focus-visible { z-index: 2; outline: 3px solid var(--sun); outline-offset: -6px; }
 .sceneNumber { position: relative; z-index: 2; display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; color: var(--night); background: rgba(255,249,233,.9); font: 700 11px/1 "Courier New", monospace; letter-spacing: .12em; }
 .sceneContent { position: absolute; z-index: 2; left: 25px; right: 25px; bottom: 28px; }
 .sceneContent h3 { margin: 0 0 15px; font-family: var(--serif); font-size: 30px; text-shadow: 0 2px 18px rgba(0,0,0,.45); }
 .sceneContent p { max-width: 370px; margin: 0 0 25px; color: rgba(255,249,233,.83); font-size: 14px; line-height: 1.85; }
 .sceneContent small { font: 600 9px/1 "Courier New", monospace; letter-spacing: .16em; }
+
+.sceneDetailPage { min-height: 100vh; color: var(--night); background: var(--paper); }
+.sceneDetailNav { display: flex; align-items: center; justify-content: space-between; padding: 24px 4vw; border-bottom: 1px solid var(--line); }
+.sceneDetailNav > a:first-child { font: 600 10px/1 "Courier New", monospace; letter-spacing: .14em; text-transform: uppercase; }
+.sceneDetailHero { position: relative; height: min(72vw, 820px); min-height: 520px; margin: 0; overflow: hidden; background: var(--night); }
+.sceneDetailHero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 42%, rgba(8,22,32,.88) 100%); pointer-events: none; }
+.sceneDetailHero img { width: 100%; height: 100%; object-fit: cover; }
+.sceneDetailHero figcaption { position: absolute; z-index: 1; right: 5vw; bottom: 5vw; left: 5vw; display: flex; align-items: end; justify-content: space-between; gap: 30px; color: var(--jasmine); }
+.sceneDetailHero figcaption span { font: 700 10px/1 "Courier New", monospace; letter-spacing: .18em; }
+.sceneDetailHero figcaption strong { max-width: 8em; font-family: var(--serif); font-size: clamp(44px, 6vw, 92px); font-weight: 600; line-height: 1.05; text-align: right; }
+.sceneDetailArticle { display: grid; grid-template-columns: minmax(0,.82fr) minmax(0,1.18fr); gap: 10vw; padding: 110px 9vw 90px; }
+.sceneDetailArticle > header { position: sticky; top: 30px; align-self: start; }
+.sceneDetailSource { margin: 0 0 38px; color: var(--red); font: 700 10px/1 "Courier New", monospace; letter-spacing: .16em; }
+.sceneDetailArticle h1 { margin: 0; font-family: var(--serif); font-size: clamp(48px, 6vw, 88px); font-weight: 600; line-height: 1.1; }
+.sceneDetailArticle blockquote { margin: 42px 0; padding-left: 24px; border-left: 3px solid var(--sun); font-family: var(--serif); font-size: clamp(22px, 2.2vw, 34px); line-height: 1.65; }
+.sceneParticipants { padding-top: 24px; border-top: 1px solid var(--line); }
+.sceneParticipants span { font: 700 9px/1 "Courier New", monospace; letter-spacing: .16em; }
+.sceneParticipants p { margin: 12px 0 0; color: rgba(23,42,50,.72); font-size: 13px; line-height: 1.8; }
+.sceneExcerpt { align-self: start; padding-top: 10px; font-family: var(--serif); font-size: clamp(19px, 1.55vw, 24px); line-height: 2.15; }
+.sceneExcerpt p { margin: 0; }
+.sceneExcerpt p + p { margin-top: 1.5em; }
+.sceneDraftNote { grid-column: 2; margin: 35px 0 0; padding: 20px 0 0; border-top: 1px solid var(--line); color: rgba(23,42,50,.62); font-size: 12px; line-height: 1.8; }
+.sceneDetailPagination { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+.sceneDetailPagination a { min-height: 190px; padding: 48px 6vw; color: inherit; text-decoration: none; transition: background .25s ease; }
+.sceneDetailPagination a + a { border-left: 1px solid var(--line); text-align: right; }
+.sceneDetailPagination a:hover,.sceneDetailPagination a:focus-visible { background: var(--jasmine); }
+.sceneDetailPagination span { display: block; margin-bottom: 16px; font: 700 9px/1 "Courier New", monospace; letter-spacing: .16em; }
+.sceneDetailPagination strong { font-family: var(--serif); font-size: clamp(25px, 3vw, 42px); font-weight: 600; }
 
 .characters { background: var(--paper); }
 .charactersHeader { display: grid; grid-template-columns: 1fr .45fr; gap: 10vw; align-items: end; margin: 72px 4vw 80px; }
@@ -298,6 +327,18 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
   .scenes h2 { margin: 48px 0 38px; font-size: 52px; }
   .sceneGrid { grid-template-columns: 1fr; }
   .sceneCard { min-height: 380px; }
+  .sceneDetailNav { padding: 20px; }
+  .sceneDetailHero { height: 68vh; min-height: 520px; }
+  .sceneDetailHero figcaption { right: 20px; bottom: 28px; left: 20px; align-items: start; flex-direction: column; }
+  .sceneDetailHero figcaption strong { max-width: 9em; font-size: 48px; text-align: left; }
+  .sceneDetailArticle { display: block; padding: 72px 20px 65px; }
+  .sceneDetailArticle > header { position: static; }
+  .sceneDetailArticle h1 { font-size: 52px; }
+  .sceneExcerpt { margin-top: 65px; font-size: 19px; }
+  .sceneDraftNote { margin-top: 32px; }
+  .sceneDetailPagination { grid-template-columns: 1fr; }
+  .sceneDetailPagination a { min-height: 140px; padding: 35px 20px; }
+  .sceneDetailPagination a + a { border-top: 1px solid var(--line); border-left: 0; }
   .charactersHeader { margin: 52px 0 48px; }
   .charactersHeader h2 { font-size: 42px; }
   .characterRow { grid-template-columns: 35px 1fr; gap: 12px 20px; padding: 25px 0; }
