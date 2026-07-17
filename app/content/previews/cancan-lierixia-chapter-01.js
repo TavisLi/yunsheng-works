@@ -446,4 +446,4 @@ export const cancanLierixiaChapterOne = [
   { id: "chapter-01-p445", text: "何念恩沒忍住笑了。" },
   { id: "chapter-01-p446", text: "幼稚鬼。" },
   { id: "chapter-01-p447", text: "她挑了挑眉，對上莊梔和蘇子宣的視線，呵呵笑了兩聲：「嗯，討厭的青梅竹馬。」" },
-] as const;
+];

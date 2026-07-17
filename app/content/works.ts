@@ -1,4 +1,4 @@
-import { cancanLierixiaChapterOne } from "./previews/cancan-lierixia-chapter-01.ts";
+import { cancanLierixiaChapterOne } from "./previews/cancan-lierixia-chapter-01.js";
 
 export type PreviewChapterCount = 1 | 2 | 3;
 export type ChapterAvailability = "preview" | "preparing" | "locked";
