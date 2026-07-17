@@ -51,9 +51,9 @@ test("server-renders the dedicated Cancan Lierixia work page", async () => {
   assert.match(html, /id="story"/);
   assert.match(html, /id="characters"/);
   assert.match(html, /id="casting"/);
-  assert.match(html, /scene-01-dorm-after-lights\.jpg/);
-  assert.match(html, /scene-02-farewell-song\.jpg/);
-  assert.match(html, /scene-03-time-capsule-reunion\.jpg/);
+  assert.match(html, /scene-detail-01-dorm-after-lights-v3\.webp/);
+  assert.match(html, /scene-detail-02-farewell-song-v2\.webp/);
+  assert.match(html, /scene-detail-03-time-capsule-reunion-v2\.webp/);
   assert.match(html, /href="\/works\/cancan-lierixia\/scenes\/dorm-after-lights"/);
   assert.match(html, /href="\/works\/cancan-lierixia\/scenes\/farewell-song"/);
   assert.match(html, /href="\/works\/cancan-lierixia\/scenes\/time-capsule-reunion"/);
@@ -74,21 +74,21 @@ test("server-renders all three illustrated scene excerpts", async () => {
     {
       path: "/works/cancan-lierixia/scenes/dorm-after-lights",
       title: "宿舍熄燈之後",
-      image: "scene-detail-01-dorm-after-lights-v2.png",
+      image: "scene-detail-01-dorm-after-lights-v3.webp",
       source: "第一章節選 · 完稿內容",
       excerpt: "宿舍樓裡早早陷入一片黑暗",
     },
     {
       path: "/works/cancan-lierixia/scenes/farewell-song",
       title: "隔樓唱起《送別》",
-      image: "scene-detail-02-farewell-song-v2.png",
+      image: "scene-detail-02-farewell-song-v2.webp",
       source: "後續創作場景節選 · 草稿內容",
       excerpt: "她就是突然想喊他的名字",
     },
     {
       path: "/works/cancan-lierixia/scenes/time-capsule-reunion",
       title: "十年後，打開時間膠囊",
-      image: "scene-detail-03-time-capsule-reunion-v2.png",
+      image: "scene-detail-03-time-capsule-reunion-v2.webp",
       source: "後續創作場景節選 · 草稿內容",
       excerpt: "何念恩到的時候，時間膠囊已經都被挖出來了",
     },

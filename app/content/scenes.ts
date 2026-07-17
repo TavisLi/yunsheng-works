@@ -1,3 +1,5 @@
+import { cancanLierixiaChapterOne } from "./previews/cancan-lierixia-chapter-01.js";
+
 export type CancanScene = {
   number: string;
   slug: string;
@@ -15,28 +17,37 @@ export type CancanScene = {
   isDraft: boolean;
 };
 
+const chapterOneParagraphs = new Map(
+  cancanLierixiaChapterOne.map(({ id, text }) => [id, text]),
+);
+
+function chapterOneText(...ids: ReadonlyArray<string>) {
+  return ids.map((id) => chapterOneParagraphs.get(id)).filter(Boolean) as string[];
+}
+
 export const cancanScenes: ReadonlyArray<CancanScene> = [
   {
     number: "01",
     slug: "dorm-after-lights",
     title: "宿舍熄燈之後",
     copy: "一場偷偷進行的告別，把笑聲、酒氣與沒說完的真心留在盛夏夜裡。",
-    motif: "紙杯 · 走廊 · 少年心事",
-    cardImage: "/scene-01-dorm-after-lights.jpg",
-    cardImageAlt: "熄燈後，女生們圍坐在宿舍地板分享零食與心事的手繪場景",
-    detailImage: "/scene-detail-01-dorm-after-lights-v2.png",
+    motif: "啤酒罐 · 夜燈 · 少年心事",
+    cardImage: "/scene-detail-01-dorm-after-lights-v3.webp",
+    cardImageAlt: "熄燈後，女生們圍坐在宿舍地板共傳一罐啤酒並分享心事",
+    detailImage: "/scene-detail-01-dorm-after-lights-v3.webp",
     detailImageAlt:
       "畢業前最後一晚，何念恩、莊梔與女同學在熄燈後的宿舍圍坐談心",
     sourceLabel: "第一章節選 · 完稿內容",
-    lead: "那是畢業前的最後一個晚上。過了今晚，她們就要離開這所學校了。",
+    lead: chapterOneText("chapter-01-p002", "chapter-01-p003").join(""),
     participants: ["何念恩", "莊梔", "六零四寢室女同學"],
-    paragraphs: [
-      "她們照常洗漱，照樣在睡前那寶貴的半小時裡聊聊天、吃點小零食，然後照常聽她們早就聽膩的熄燈鈴聲。照常熄燈，宿管照樣來查寢，一切似乎都和平常沒有什麼兩樣，照常得不可思議。",
-      "宿舍樓裡早早陷入一片黑暗，所有人都沉沉睡去⋯⋯才怪。",
-      "「快快快。」何念恩小心翼翼地轉開門把，躡手躡腳地走出寢室，左看右看確認整條走廊都沒有人了，頓時激動不已，招呼後面幾個人。",
-      "趁著宿管去其他寢室查寢的間隙，何念恩和班上其他女生貓著腰，偷偷竄到六零四寢室去。",
-      "屋裡只亮著一盞夜燈，微弱的昏黃燈光照在彼此臉上。她們圍坐在一起，窗簾拉得嚴嚴實實，空氣裡混合著沐浴露的香氣和散不掉的花露水味。",
-    ],
+    paragraphs: chapterOneText(
+      "chapter-01-p008",
+      "chapter-01-p009",
+      "chapter-01-p010",
+      "chapter-01-p011",
+      "chapter-01-p013",
+      "chapter-01-p023",
+    ),
     isDraft: false,
   },
   {
@@ -45,9 +56,9 @@ export const cancanScenes: ReadonlyArray<CancanScene> = [
     title: "隔樓唱起《送別》",
     copy: "有人站在樓上，有人在樓下。歌聲越過欄杆，也越過再也回不去的年紀。",
     motif: "夜色 · 合唱 · 畢業",
-    cardImage: "/scene-02-farewell-song.jpg",
-    cardImageAlt: "畢業夜，學生們分站上下兩層宿舍走廊合唱送別的手繪場景",
-    detailImage: "/scene-detail-02-farewell-song-v2.png",
+    cardImage: "/scene-detail-02-farewell-song-v2.webp",
+    cardImageAlt: "畢業夜，學生們隔著宿舍中庭在相對的陽台合唱送別",
+    detailImage: "/scene-detail-02-farewell-song-v2.webp",
     detailImageAlt:
       "何念恩與莊梔站在女生宿舍陽台，隔著中庭與對面男生宿舍的許承恩一同唱起送別",
     sourceLabel: "後續創作場景節選 · 草稿內容",
@@ -69,11 +80,11 @@ export const cancanScenes: ReadonlyArray<CancanScene> = [
     title: "十年後，打開時間膠囊",
     copy: "當年寫給未來的信終於重見陽光，他們才明白：青春沒有消失，只是換了一種方式留在身上。",
     motif: "舊信 · 茉莉 · 重逢",
-    cardImage: "/scene-03-time-capsule-reunion.jpg",
-    cardImageAlt: "十年後，四位朋友在樹下打開時間膠囊與舊信的手繪場景",
-    detailImage: "/scene-detail-03-time-capsule-reunion-v2.png",
+    cardImage: "/scene-detail-03-time-capsule-reunion-v2.webp",
+    cardImageAlt: "十年重聚的蒙太奇：四位故友在校園讀舊信、翻看合照並再次相遇",
+    detailImage: "/scene-detail-03-time-capsule-reunion-v2.webp",
     detailImageAlt:
-      "十年後校園重聚，何念恩與許承恩在樹下讀信，莊梔拿著舊照片，江遇在不遠處等候",
+      "十年重聚的蒙太奇：何念恩與許承恩在樹下讀信，莊梔拿著舊照片，江遇在不遠處等候",
     sourceLabel: "後續創作場景節選 · 草稿內容",
     lead: "原來離初中畢業，已經過去十年了。",
     participants: ["何念恩", "許承恩", "莊梔", "江遇"],
@@ -82,7 +93,7 @@ export const cancanScenes: ReadonlyArray<CancanScene> = [
       "打開來的時候，何念恩笑了。青澀的字跡，是寫得很匆忙的一封信。這麼多年過去，她早已忘記自己寫了什麼；當她緩緩攤開信紙，讀完不長的幾行字，居然隱隱有些鼻酸。",
       "她把信高高舉起。陽光穿透紙張的那一剎那，那些隱藏在塗抹痕跡下的心事，全都暴露無遺。",
       "這個穿越時間的膠囊，完好地保留了少年的心意。",
-      "江遇和許承恩擦身而過的時候，絲毫沒有停下來。他徑直走近何念恩，朝她笑了笑。",
+      "她目送許承恩和同學越走越遠，江遇則說可以去旁邊逛逛，在附近等她和朋友們敘舊結束。",
       "後來莊梔拿出一張泛黃卷邊的舊照片。那上面是他們班十二個女生的合照，一個不少。",
     ],
     isDraft: true,
