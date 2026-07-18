@@ -31,6 +31,7 @@ test("server-renders the Yunsheng Works brand home with its first work", async (
   assert.match(html, /<title>允生作品｜原創小說與網頁閱讀<\/title>/i);
   assert.match(html, /<link rel="icon" href="\/favicon\.svg"/i);
   assert.match(html, /允生作品/);
+  assert.match(html, /yunsheng-home-sunset-illustration\.webp/);
   assert.match(html, /故事從這裡出生/);
   assert.match(
     html,

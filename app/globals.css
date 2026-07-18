@@ -36,11 +36,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--red); outline-o
 .brandHero { position: relative; isolation: isolate; min-height: 100svh; overflow: hidden; display: grid; place-items: center; padding: 130px 6vw 90px; }
 .brandHero::before { content: ""; position: absolute; z-index: -2; inset: 0; opacity: .2; background: repeating-linear-gradient(90deg, transparent 0 calc(8.333vw - 1px), rgba(255,249,233,.16) calc(8.333vw - 1px) 8.333vw); }
 .brandHero::after { content: ""; position: absolute; z-index: -1; top: -28vw; right: -12vw; width: 72vw; height: 72vw; border-radius: 50%; background: radial-gradient(circle at 38% 38%, #fff6bd 0, var(--sun-light) 28%, var(--sun) 64%, #d48b20 100%); box-shadow: 0 0 120px rgba(246,183,60,.3); animation: sunBreath 9s ease-in-out infinite; }
-.brandSeal { position: absolute; z-index: 0; top: 50%; right: 7vw; width: min(48vw, 650px); aspect-ratio: 1; border: 1px solid rgba(20,42,56,.38); border-radius: 50%; display: grid; place-items: center; color: rgba(20,42,56,.86); transform: translateY(-46%); }
-.brandSeal::before,.brandSeal::after { content: ""; position: absolute; background: rgba(20,42,56,.28); }
-.brandSeal::before { width: 118%; height: 1px; }
-.brandSeal::after { width: 1px; height: 118%; }
-.brandSeal span { font-family: var(--serif); font-size: clamp(180px, 28vw, 430px); font-weight: 800; line-height: 1; transform: translateY(-.03em); }
+.brandSeal { position: absolute; z-index: 0; top: 50%; right: 1.5vw; width: min(58vw, 760px); aspect-ratio: 1; transform: translateY(-46%) rotate(1deg); }
+.brandSeal img { height: 100%; object-fit: cover; object-position: center; opacity: .94; filter: saturate(.86) contrast(.95); -webkit-mask-image: radial-gradient(ellipse at 62% 62%, #000 0 48%, rgba(0,0,0,.94) 60%, transparent 86%); mask-image: radial-gradient(ellipse at 62% 62%, #000 0 48%, rgba(0,0,0,.94) 60%, transparent 86%); }
 .brandIntro { position: relative; z-index: 2; justify-self: start; max-width: 690px; }
 .brandIntro h1 { max-width: 6em; margin: 0; font-family: var(--serif); font-size: clamp(72px, 10vw, 154px); font-weight: 600; line-height: .98; letter-spacing: -.07em; }
 .brandIntro > p:not(.eyebrow) { max-width: 500px; margin: 35px 0 0; color: rgba(255,249,233,.75); font-size: 15px; line-height: 2; }
@@ -265,7 +262,7 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
 @keyframes noteFloat { 0%,100% { transform: rotate(-4deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-8px); } }
 
 @media (max-width: 1050px) {
-  .brandSeal { right: -10vw; width: 62vw; opacity: .8; }
+  .brandSeal { right: -12vw; width: 72vw; opacity: .82; }
   .brandWorksHeader { grid-template-columns: 1fr; gap: 36px; }
   .brandWorksHeader > p { max-width: 650px; }
   .brandWorkCard { grid-template-columns: 1fr; }
@@ -290,7 +287,8 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
   .brandHero { min-height: 780px; align-items: start; padding: 150px 20px 80px; }
   .brandHero::before { background-size: 25vw 100%; }
   .brandHero::after { top: 55vh; right: -55vw; width: 145vw; height: 145vw; }
-  .brandSeal { top: auto; right: -29vw; bottom: -5vw; width: 110vw; transform: none; }
+  .brandSeal { top: auto; right: -22vw; bottom: -6vw; width: 118vw; opacity: .72; transform: rotate(1deg); }
+  .brandSeal img { -webkit-mask-image: radial-gradient(ellipse at 63% 64%, #000 0 42%, rgba(0,0,0,.92) 58%, transparent 84%); mask-image: radial-gradient(ellipse at 63% 64%, #000 0 42%, rgba(0,0,0,.92) 58%, transparent 84%); }
   .brandIntro h1 { max-width: 5em; font-size: clamp(67px, 21vw, 98px); }
   .brandIntro > p:not(.eyebrow) { max-width: 82%; font-size: 13px; }
   .brandMarginNote { display: none; }

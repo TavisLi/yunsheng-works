@@ -23,7 +23,12 @@ export default function Home() {
 
       <section className="brandHero" id="top">
         <div className="brandSeal" aria-hidden="true">
-          <span>允</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/yunsheng-home-sunset-illustration.webp"
+            alt=""
+            fetchPriority="high"
+          />
         </div>
         <div className="brandIntro">
           <p className="eyebrow">YUNSHENG WORKS · 允生原創小說</p>
