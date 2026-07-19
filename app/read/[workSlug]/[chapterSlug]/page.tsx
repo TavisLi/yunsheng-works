@@ -48,6 +48,20 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
     );
   }
 
+  const readableChapters = [work.introduction, ...work.chapters].filter(
+    (entry) =>
+      entry.availability === "public" || entry.availability === "preview",
+  );
+  const currentIndex = readableChapters.findIndex(
+    (entry) => entry.slug === chapter.slug,
+  );
+  const previousChapter = currentIndex > 0
+    ? readableChapters[currentIndex - 1]
+    : undefined;
+  const nextChapter = currentIndex >= 0
+    ? readableChapters[currentIndex + 1]
+    : undefined;
+
   return (
     <ReaderShell
       workSlug={work.slug}
@@ -56,6 +70,8 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
       chapterTitle={chapter.title}
       readingKind={chapter.kind}
       paragraphs={chapter.paragraphs}
+      previousChapter={previousChapter}
+      nextChapter={nextChapter}
     />
   );
 }

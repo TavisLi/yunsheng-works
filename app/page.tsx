@@ -1,14 +1,16 @@
-import { getPublicWork } from "./content/works";
+import { getPublicWorks } from "./content/works";
 
-function getFirstWork() {
-  const configuredWork = getPublicWork("cancan-lierixia");
+function getPublishedWorks() {
+  const configuredWorks = getPublicWorks();
+  const configuredWork = configuredWorks[0];
   if (!configuredWork) {
-    throw new Error("First public work configuration is missing");
+    throw new Error("Public work configuration is missing");
   }
-  return configuredWork;
+  return configuredWorks;
 }
 
-const firstWork = getFirstWork();
+const publishedWorks = getPublishedWorks();
+const firstWork = publishedWorks[0];
 
 export default function Home() {
   return (
@@ -17,7 +19,10 @@ export default function Home() {
         <a className="brandWordmark" href="#top" aria-label="回到頁首">
           允生作品
         </a>
-        <a href="#works">作品</a>
+        <div className="brandNavLinks">
+          <a href="#works">作品</a>
+          <a href="/account">讀者帳號</a>
+        </div>
         <span>ORIGINAL STORIES · SINCE 2026</span>
       </nav>
 
@@ -58,28 +63,34 @@ export default function Home() {
           </p>
         </header>
 
-        <article className="brandWorkCard">
-          <a className="brandWorkImage" href="/works/cancan-lierixia" aria-label="進入《燦燦烈日下》作品頁">
-            {/* Keep the original public artwork path; vinext serves it directly without a loader. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={firstWork.cover.src}
-              alt={firstWork.cover.alt}
-            />
-            <span>WORK 001</span>
-          </a>
-          <div className="brandWorkCopy">
-            <p>{firstWork.publicationStatus}</p>
-            <h3>{firstWork.title}</h3>
-            <blockquote>有些人陪你長大，有些人教你告別。</blockquote>
-            <p className="brandWorkSummary">
-              {firstWork.synopsis}
-            </p>
-            <a className="primaryButton brandWorkButton" href="/works/cancan-lierixia">
-              進入作品 <span aria-hidden="true">↗</span>
+        {publishedWorks.map((work, index) => (
+          <article className="brandWorkCard" key={work.id}>
+            <a
+              className="brandWorkImage"
+              href={`/works/${work.slug}`}
+              aria-label={`進入《${work.title}》作品頁`}
+            >
+              {/* Keep public artwork paths; vinext serves them directly without a loader. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={work.cover.src} alt={work.cover.alt} />
+              <span>WORK {String(index + 1).padStart(3, "0")}</span>
             </a>
-          </div>
-        </article>
+            <div className="brandWorkCopy">
+              <p>{work.publicationStatus}</p>
+              <h3>{work.title}</h3>
+              {index === 0 ? (
+                <blockquote>有些人陪你長大，有些人教你告別。</blockquote>
+              ) : null}
+              <p className="brandWorkSummary">{work.synopsis}</p>
+              <a
+                className="primaryButton brandWorkButton"
+                href={`/works/${work.slug}`}
+              >
+                進入作品 <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </article>
+        ))}
       </section>
 
       <footer className="brandFooter">

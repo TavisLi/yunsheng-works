@@ -27,9 +27,19 @@
 
 # private manuscript sources / full-text extracts (never publish)
 /private-manuscript/
+/private-manuscripts/
+/manuscripts/
 /content-source/manuscripts/
 /content-source/full-text/
 /tmp/pdfs/
+*.pdf
+*.epub
+*.mobi
+*.doc
+*.docx
+**/*full-manuscript*
+**/*完整手稿*
+**/*全文抽取*
 **/novel.txt
 **/燦燦烈日下（1）.pdf
 **/Nini小說燦燦烈日下（1）全面分析與續寫聖經.md

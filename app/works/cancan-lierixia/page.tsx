@@ -59,6 +59,7 @@ export default function Home() {
           <a href="#characters">人物</a>
           <a href="#casting">概念選角</a>
           <a href="#catalog">試讀</a>
+          <a href="/account?work=cancan-lierixia">讀者帳號</a>
         </div>
         <span className="navStatus">{work.publicationStatus}</span>
       </nav>

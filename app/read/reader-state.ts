@@ -13,7 +13,13 @@ export type StoredReaderState = {
 
 const fontSizes: ReadonlyArray<FontSize> = ["small", "standard", "large"];
 
-function isStoredReaderState(value: unknown): value is StoredReaderState {
+function isCanonicalUtcTimestamp(value: unknown): value is string {
+  if (typeof value !== "string") return false;
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) && new Date(parsed).toISOString() === value;
+}
+
+export function isStoredReaderState(value: unknown): value is StoredReaderState {
   if (!value || typeof value !== "object") return false;
   const state = value as Partial<StoredReaderState>;
   return (
@@ -24,8 +30,10 @@ function isStoredReaderState(value: unknown): value is StoredReaderState {
     (state.theme === "day" || state.theme === "night") &&
     typeof state.progress === "number" &&
     Number.isFinite(state.progress) &&
-    typeof state.updatedAt === "string" &&
-    Number.isFinite(Date.parse(state.updatedAt))
+    state.progress >= 0 &&
+    state.progress <= 100 &&
+    (state.anchor === undefined || typeof state.anchor === "string") &&
+    isCanonicalUtcTimestamp(state.updatedAt)
   );
 }
 
@@ -45,6 +53,20 @@ export function serializeReaderState(
   return JSON.stringify({
     ...state,
     version: 1,
-    updatedAt: state.updatedAt ?? new Date().toISOString(),
+    updatedAt: state.updatedAt
+      ? new Date(state.updatedAt).toISOString()
+      : new Date().toISOString(),
   } satisfies StoredReaderState);
+}
+
+export function mergeStoredReaderStates(
+  localState: StoredReaderState | null,
+  cloudState: StoredReaderState | null,
+) {
+  if (!localState) return cloudState;
+  if (!cloudState) return localState;
+
+  return Date.parse(localState.updatedAt) > Date.parse(cloudState.updatedAt)
+    ? localState
+    : cloudState;
 }

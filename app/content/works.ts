@@ -3,7 +3,7 @@ import { cancanLierixiaChapterOne } from "./previews/cancan-lierixia-chapter-01.
 export type PreviewChapterCount = 1 | 2 | 3;
 export type ChapterAvailability = "preview" | "preparing" | "locked";
 
-type Paragraph = { id: string; text: string };
+export type Paragraph = { id: string; text: string };
 
 type StoredChapter = {
   id: string;
@@ -14,7 +14,7 @@ type StoredChapter = {
   sourceParagraphs?: ReadonlyArray<Paragraph>;
 };
 
-type StoredWork = {
+export type WorkDefinition = {
   id: string;
   slug: string;
   title: string;
@@ -43,7 +43,7 @@ export type PublicCatalogEntry = {
   availability: "public" | ChapterAvailability;
 };
 
-export type PublicWork = Omit<StoredWork, "introduction" | "chapters"> & {
+export type PublicWork = Omit<WorkDefinition, "introduction" | "chapters"> & {
   introduction: PublicCatalogEntry;
   chapters: ReadonlyArray<PublicCatalogEntry>;
 };
@@ -52,7 +52,7 @@ export type PublicReading = PublicCatalogEntry & {
   paragraphs?: ReadonlyArray<Paragraph>;
 };
 
-const works: ReadonlyArray<StoredWork> = [
+const works: ReadonlyArray<WorkDefinition> = [
   {
     id: "work_001_cancan_lierixia",
     slug: "cancan-lierixia",
@@ -128,21 +128,14 @@ export function isWithinPreviewLimit(
 }
 
 function getChapterAvailability(
-  work: StoredWork,
+  work: WorkDefinition,
   chapter: StoredChapter,
 ): ChapterAvailability {
   if (!isWithinPreviewLimit(work.previewChapterCount, chapter.order)) return "locked";
   return chapter.sourceParagraphs?.length ? "preview" : "preparing";
 }
 
-function findStoredWork(slug: string) {
-  return works.find((work) => work.slug === slug);
-}
-
-export function getPublicWork(slug: string): PublicWork | undefined {
-  const work = findStoredWork(slug);
-  if (!work) return undefined;
-
+function toPublicWork(work: WorkDefinition): PublicWork {
   return {
     id: work.id,
     slug: work.slug,
@@ -173,38 +166,66 @@ export function getPublicWork(slug: string): PublicWork | undefined {
   };
 }
 
-export function getPublicReading(
-  workSlug: string,
-  readingSlug: string,
-): PublicReading | undefined {
-  const work = findStoredWork(workSlug);
-  if (!work) return undefined;
-
-  if (work.introduction.slug === readingSlug) {
-    return {
-      id: work.introduction.id,
-      number: "前導",
-      slug: work.introduction.slug,
-      title: work.introduction.title,
-      contentVersion: work.introduction.contentVersion,
-      kind: "introduction",
-      availability: "public",
-      paragraphs: work.introduction.paragraphs,
-    };
-  }
-
-  const chapter = work.chapters.find(({ slug }) => slug === readingSlug);
-  if (!chapter) return undefined;
-  const availability = getChapterAvailability(work, chapter);
-
+export function createWorkRegistry(definitions: ReadonlyArray<WorkDefinition>) {
   return {
-    id: chapter.id,
-    number: String(chapter.order).padStart(2, "0"),
-    slug: chapter.slug,
-    title: chapter.title,
-    contentVersion: chapter.contentVersion,
-    kind: "chapter",
-    availability,
-    paragraphs: availability === "preview" ? chapter.sourceParagraphs : undefined,
+    list(): ReadonlyArray<PublicWork> {
+      return definitions.map(toPublicWork);
+    },
+    getWork(slug: string): PublicWork | undefined {
+      const work = definitions.find((definition) => definition.slug === slug);
+      return work ? toPublicWork(work) : undefined;
+    },
+    getReading(
+      workSlug: string,
+      readingSlug: string,
+    ): PublicReading | undefined {
+      const work = definitions.find(
+        (definition) => definition.slug === workSlug,
+      );
+      if (!work) return undefined;
+
+      if (work.introduction.slug === readingSlug) {
+        return {
+          id: work.introduction.id,
+          number: "前導",
+          slug: work.introduction.slug,
+          title: work.introduction.title,
+          contentVersion: work.introduction.contentVersion,
+          kind: "introduction",
+          availability: "public",
+          paragraphs: work.introduction.paragraphs,
+        };
+      }
+
+      const chapter = work.chapters.find(({ slug }) => slug === readingSlug);
+      if (!chapter) return undefined;
+      const availability = getChapterAvailability(work, chapter);
+
+      return {
+        id: chapter.id,
+        number: String(chapter.order).padStart(2, "0"),
+        slug: chapter.slug,
+        title: chapter.title,
+        contentVersion: chapter.contentVersion,
+        kind: "chapter",
+        availability,
+        paragraphs:
+          availability === "preview" ? chapter.sourceParagraphs : undefined,
+      };
+    },
   };
+}
+
+const publicWorks = createWorkRegistry(works);
+
+export function getPublicWorks() {
+  return publicWorks.list();
+}
+
+export function getPublicWork(slug: string) {
+  return publicWorks.getWork(slug);
+}
+
+export function getPublicReading(workSlug: string, readingSlug: string) {
+  return publicWorks.getReading(workSlug, readingSlug);
 }
