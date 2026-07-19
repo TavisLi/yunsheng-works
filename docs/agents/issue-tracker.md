@@ -1,6 +1,6 @@
 # Issue tracker：GitHub
 
-本專案的 Issues 與 PRD 發佈於 GitHub repository `TavisLi/yunsheng-works`。由於本機 Sites 專案未設定 GitHub remote，所有 GitHub CLI 操作均應明確傳入 `--repo TavisLi/yunsheng-works`。
+本專案的 Issues 與 PRD 發佈於 GitHub repository `TavisLi/yunsheng-works`。本機 repository 已設定同一個 GitHub remote；GitHub CLI 操作仍應明確傳入 `--repo TavisLi/yunsheng-works`，避免在不同工作目錄執行時指向錯誤專案。
 
 ## 慣例
 
