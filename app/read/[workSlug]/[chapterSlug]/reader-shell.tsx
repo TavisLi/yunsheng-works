@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { localePath, localized, type SiteLocale } from "../../../i18n";
+import LanguageSwitcher from "../../../language-switcher";
 import {
   isStoredReaderState,
   mergeStoredReaderStates,
@@ -12,6 +14,7 @@ import {
 
 type ReaderShellProps = {
   workSlug: string;
+  locale: SiteLocale;
   workTitle: string;
   chapterSlug: string;
   chapterTitle: string;
@@ -29,6 +32,7 @@ const fontSizes: ReadonlyArray<{ value: FontSize; label: string }> = [
 
 export default function ReaderShell({
   workSlug,
+  locale,
   workTitle,
   chapterSlug,
   chapterTitle,
@@ -37,6 +41,7 @@ export default function ReaderShell({
   previousChapter,
   nextChapter,
 }: ReaderShellProps) {
+  const copy = <T,>(traditional: T, simplified: T) => localized(locale, traditional, simplified);
   const storageKey = `yunsheng-reader:${workSlug}`;
   const [fontSize, setFontSize] = useState<FontSize>("standard");
   const [theme, setTheme] = useState<ReaderTheme>("day");
@@ -135,7 +140,7 @@ export default function ReaderShell({
             applyState(merged);
             if (merged.chapterSlug !== chapterSlug) {
               window.location.replace(
-                `/read/${workSlug}/${merged.chapterSlug}`,
+                localePath(locale, `/read/${workSlug}/${merged.chapterSlug}`),
               );
               return;
             }
@@ -160,7 +165,7 @@ export default function ReaderShell({
     return () => {
       cancelled = true;
     };
-  }, [chapterSlug, ready, storageKey, workSlug]);
+  }, [chapterSlug, locale, ready, storageKey, workSlug]);
 
   useEffect(() => {
     if (!ready || !syncSettled) return;
@@ -233,31 +238,32 @@ export default function ReaderShell({
   ]);
 
   const syncLabel = {
-    checking: "確認同步狀態",
-    local: "登入後跨裝置同步",
-    synced: "閱讀進度已同步",
-    pending: "尚未同步，將自動重試",
+    checking: copy("確認同步狀態", "确认同步状态"),
+    local: copy("登入後跨裝置同步", "登录后跨设备同步"),
+    synced: copy("閱讀進度已同步", "阅读进度已同步"),
+    pending: copy("尚未同步，將自動重試", "尚未同步，将自动重试"),
   }[syncStatus];
 
   return (
     <main className={`readerPage font-${fontSize}`} data-theme={theme}>
       <header className="readerTopbar">
-        <a href={`/works/${workSlug}`} aria-label={`返回《${workTitle}》作品頁`}>
+        <a href={localePath(locale, `/works/${workSlug}`)} aria-label={copy(`返回《${workTitle}》作品頁`, `返回《${workTitle}》作品页`)}>
           <span aria-hidden="true">←</span> {workTitle}
         </a>
         <div>
-          <span>允生作品 · 網頁閱讀器</span>
+          <span>允生作品 · {copy("網頁閱讀器", "网页阅读器")}</span>
           <a
             className={`readerSync is-${syncStatus}`}
-            href={`/account?work=${encodeURIComponent(workSlug)}`}
+            href={`${localePath(locale, "/account")}?work=${encodeURIComponent(workSlug)}`}
           >
             {syncLabel}
           </a>
+          <LanguageSwitcher locale={locale} path={`/read/${workSlug}/${chapterSlug}`} />
         </div>
       </header>
 
-      <aside className="readerControls" aria-label="閱讀設定">
-        <div className="fontControls" role="group" aria-label="字體大小">
+      <aside className="readerControls" aria-label={copy("閱讀設定", "阅读设置")}>
+        <div className="fontControls" role="group" aria-label={copy("字體大小", "字体大小")}>
           {fontSizes.map(({ value, label }) => (
             <button
               type="button"
@@ -265,7 +271,7 @@ export default function ReaderShell({
               key={value}
               onClick={() => setFontSize(value)}
             >
-              {label}
+              {value === "standard" ? copy(label, "标准") : label}
             </button>
           ))}
         </div>
@@ -275,7 +281,7 @@ export default function ReaderShell({
           aria-pressed={theme === "night"}
           onClick={() => setTheme(theme === "day" ? "night" : "day")}
         >
-          {theme === "day" ? "夜間模式" : "日間模式"}
+          {theme === "day" ? copy("夜間模式", "夜间模式") : copy("日間模式", "日间模式")}
         </button>
       </aside>
 
@@ -283,8 +289,8 @@ export default function ReaderShell({
         <header>
           <p>
             {readingKind === "introduction"
-              ? "PUBLIC INTRODUCTION · 公開前導"
-              : "FREE PREVIEW · 免費試讀"}
+              ? `PUBLIC INTRODUCTION · ${copy("公開前導", "公开前导")}`
+              : `FREE PREVIEW · ${copy("免費試讀", "免费试读")}`}
           </p>
           <h1>{chapterTitle}</h1>
           <span>{workTitle}</span>
@@ -296,26 +302,26 @@ export default function ReaderShell({
         </div>
         <footer className="previewEnd">
           <span>
-            {readingKind === "introduction" ? "公開前導到這裡" : "試讀內容到這裡"}
+            {readingKind === "introduction" ? copy("公開前導到這裡", "公开前导到这里") : copy("試讀內容到這裡", "试读内容到这里")}
           </span>
-          <h2>正式章節正在逐章校對。</h2>
+          <h2>{copy("正式章節正在逐章校對。", "正式章节正在逐章校对。")}</h2>
           <p>
             {readingKind === "introduction"
-              ? "本頁只包含已公開的作品前導；完整手稿與未公開章節不會傳送到瀏覽器。"
-              : "本頁只包含作者核准公開的免費試讀章節；完整手稿與未公開章節不會傳送到瀏覽器。"}
+              ? copy("本頁只包含已公開的作品前導；完整手稿與未公開章節不會傳送到瀏覽器。", "本页只包含已公开的作品前导；完整手稿与未公开章节不会传送到浏览器。")
+              : copy("本頁只包含作者核准公開的免費試讀章節；完整手稿與未公開章節不會傳送到瀏覽器。", "本页只包含作者核准公开的免费试读章节；完整手稿与未公开章节不会传送到浏览器。")}
           </p>
-          <a href={`/works/${workSlug}#catalog`}>返回章節目錄</a>
+          <a href={`${localePath(locale, `/works/${workSlug}`)}#catalog`}>{copy("返回章節目錄", "返回章节目录")}</a>
         </footer>
         <nav className="readerChapterNav" aria-label="試讀章節導覽">
           {previousChapter ? (
-            <a href={`/read/${workSlug}/${previousChapter.slug}`}>
-              <span>← 上一章</span>
+            <a href={localePath(locale, `/read/${workSlug}/${previousChapter.slug}`)}>
+              <span>← {copy("上一章", "上一章")}</span>
               <strong>{previousChapter.title}</strong>
             </a>
           ) : <span />}
           {nextChapter ? (
-            <a href={`/read/${workSlug}/${nextChapter.slug}`}>
-              <span>下一章 →</span>
+            <a href={localePath(locale, `/read/${workSlug}/${nextChapter.slug}`)}>
+              <span>{copy("下一章", "下一章")} →</span>
               <strong>{nextChapter.title}</strong>
             </a>
           ) : <span />}
@@ -323,8 +329,8 @@ export default function ReaderShell({
       </article>
 
       <div className="readerProgress">
-        <span>閱讀進度</span>
-        <progress max="100" value={progress} aria-label="閱讀進度" />
+        <span>{copy("閱讀進度", "阅读进度")}</span>
+        <progress max="100" value={progress} aria-label={copy("閱讀進度", "阅读进度")} />
         <strong>{progress}%</strong>
       </div>
     </main>

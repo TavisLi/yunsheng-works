@@ -50,7 +50,7 @@ flowchart LR
 - `/works/cancan-lierixia/scenes/[sceneSlug]`：公開場景節選詳情；建置時依場景內容產生穩定路徑。
 - `/read/[workSlug]/[chapterSlug]`：網頁閱讀器或未開放章節提示頁。
 
-根佈局統一管理繁體中文語系、網站 metadata、Open Graph 與 favicon。各作品及動態內容頁再提供自己的標題與摘要。
+公開頁面以 `/zh-Hant` 與 `/zh-Hans` 作為穩定語系前綴。`proxy.ts` 處理無前綴舊連結、語系 cookie 與請求 header；根佈局依 header 設定 `lang`。各公開頁提供本地化標題、摘要、canonical 與 `hreflang`。
 
 ### 4.2 作品內容模型
 
@@ -87,9 +87,9 @@ flowchart LR
 
 ### 4.6 身份與資料庫
 
-身份 adapter 解析 Sites 轉送的 ChatGPT 已驗證 email 與可選顯示名稱，首次登入時自動建立最小化讀者帳號。公開作品與試讀不需登入；`/account`、`/api/reader-state` 與 `/api/purchases` 才使用身份。
+身份 adapter 同時解析第一方 session 與 Sites 轉送的 ChatGPT 已驗證 Email。中國大陸可使用 Email／手機＋密碼，其他地區另保留 ChatGPT。公開作品與試讀不需登入；`/account`、`/api/reader-state` 與 `/api/purchases` 才使用身份。
 
-D1 schema 包含 `reader_accounts`、`reader_states`、`purchase_records` 與 `purchase_entitlements`。閱讀狀態以 `(readerAccountId, workId)` 隔離；購買記錄與權益使用不同資料表。瀏覽器只有閱讀狀態的冪等更新權，以及自己購買記錄的唯讀權，沒有建立購買或權益的接口。所有 schema 變更由 `drizzle/` migration 管理並隨 Sites 部署套用。
+D1 schema 將 `reader_accounts`、`reader_identities`、`reader_password_credentials` 與 `reader_sessions` 分開，並以 `reader_auth_rate_limits` 控制註冊／登入嘗試預算。密碼使用版本化 PBKDF2、每筆 salt 與部署 pepper；session 只儲存 token hash。詳細決策見 [`ADR-0001`](./adr/0001-localized-reader-identity.md)。
 
 ## 5. 請求與建置流程
 
