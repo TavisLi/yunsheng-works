@@ -1,4 +1,5 @@
 import { cancanLierixiaChapterOne } from "./previews/cancan-lierixia-chapter-01.js";
+import type { SiteLocale } from "../i18n";
 
 export type PreviewChapterCount = 1 | 2 | 3;
 export type ChapterAvailability = "preview" | "preparing" | "locked";
@@ -120,6 +121,43 @@ const works: ReadonlyArray<WorkDefinition> = [
   },
 ];
 
+const simplifiedCancan = {
+  editorialVersion: "zh-Hans-promo-v1",
+  title: "灿灿烈日下",
+  coverAlt: "四位少年站在盛夏校园走廊的《燦燦烈日下》手绘概念图",
+  synopsis: "一部关于友情、初恋与十年重逢的青春成长小说。在最明亮的夏天，他们学会接受失去，仍然选择靠近。",
+  publicationStatus: "长篇小说 · 创作中",
+  introductionTitle: "作品前导",
+  introductionParagraphs: [
+    "何念恩和许承恩从彼此的少年时代穿过。他们太熟悉对方，熟悉到每一次靠近都像理所当然，每一次退后也都来不及追问。",
+    "庄栀让她明白，友情同样可以是一生的命题；江遇则在成年后告诉她，真正安全的关系不需要反复猜测。",
+    "十年后，一只时间胶囊把所有人重新带回那个盛夏。他们终于明白，接受失去，并不等于停止珍惜。",
+  ],
+  chapterTitles: ["第一章｜致一如初见的你们", "第二章", "第三章"],
+} as const;
+
+function validateLocalizedPublicContent() {
+  const source = works[0];
+  if (
+    !simplifiedCancan.editorialVersion ||
+    simplifiedCancan.introductionParagraphs.length !== source.introduction.paragraphs.length ||
+    simplifiedCancan.chapterTitles.length !== source.chapters.length ||
+    [
+      simplifiedCancan.title,
+      simplifiedCancan.coverAlt,
+      simplifiedCancan.synopsis,
+      simplifiedCancan.publicationStatus,
+      simplifiedCancan.introductionTitle,
+      ...simplifiedCancan.introductionParagraphs,
+      ...simplifiedCancan.chapterTitles,
+    ].some((value) => !value.trim())
+  ) {
+    throw new Error("zh-Hans public content is incomplete; release is blocked");
+  }
+}
+
+validateLocalizedPublicContent();
+
 export function isWithinPreviewLimit(
   previewChapterCount: PreviewChapterCount,
   chapterOrder: number,
@@ -130,54 +168,58 @@ export function isWithinPreviewLimit(
 function getChapterAvailability(
   work: WorkDefinition,
   chapter: StoredChapter,
+  locale: SiteLocale,
 ): ChapterAvailability {
   if (!isWithinPreviewLimit(work.previewChapterCount, chapter.order)) return "locked";
+  if (locale === "zh-Hans") return "preparing";
   return chapter.sourceParagraphs?.length ? "preview" : "preparing";
 }
 
-function toPublicWork(work: WorkDefinition): PublicWork {
+function toPublicWork(work: WorkDefinition, locale: SiteLocale): PublicWork {
+  const simplified = locale === "zh-Hans" && work.slug === "cancan-lierixia";
   return {
     id: work.id,
     slug: work.slug,
-    title: work.title,
+    title: simplified ? simplifiedCancan.title : work.title,
     author: work.author,
-    cover: work.cover,
-    synopsis: work.synopsis,
-    publicationStatus: work.publicationStatus,
+    cover: simplified ? { ...work.cover, alt: simplifiedCancan.coverAlt } : work.cover,
+    synopsis: simplified ? simplifiedCancan.synopsis : work.synopsis,
+    publicationStatus: simplified ? simplifiedCancan.publicationStatus : work.publicationStatus,
     previewChapterCount: work.previewChapterCount,
     introduction: {
       id: work.introduction.id,
-      number: "前導",
+      number: simplified ? "前导" : "前導",
       slug: work.introduction.slug,
-      title: work.introduction.title,
+      title: simplified ? simplifiedCancan.introductionTitle : work.introduction.title,
       contentVersion: work.introduction.contentVersion,
       kind: "introduction",
       availability: "public",
     },
-    chapters: work.chapters.map((chapter) => ({
+    chapters: work.chapters.map((chapter, index) => ({
       id: chapter.id,
       number: String(chapter.order).padStart(2, "0"),
       slug: chapter.slug,
-      title: chapter.title,
+      title: simplified ? simplifiedCancan.chapterTitles[index] : chapter.title,
       contentVersion: chapter.contentVersion,
       kind: "chapter" as const,
-      availability: getChapterAvailability(work, chapter),
+      availability: getChapterAvailability(work, chapter, locale),
     })),
   };
 }
 
 export function createWorkRegistry(definitions: ReadonlyArray<WorkDefinition>) {
   return {
-    list(): ReadonlyArray<PublicWork> {
-      return definitions.map(toPublicWork);
+    list(locale: SiteLocale = "zh-Hant"): ReadonlyArray<PublicWork> {
+      return definitions.map((work) => toPublicWork(work, locale));
     },
-    getWork(slug: string): PublicWork | undefined {
+    getWork(slug: string, locale: SiteLocale = "zh-Hant"): PublicWork | undefined {
       const work = definitions.find((definition) => definition.slug === slug);
-      return work ? toPublicWork(work) : undefined;
+      return work ? toPublicWork(work, locale) : undefined;
     },
     getReading(
       workSlug: string,
       readingSlug: string,
+      locale: SiteLocale = "zh-Hant",
     ): PublicReading | undefined {
       const work = definitions.find(
         (definition) => definition.slug === workSlug,
@@ -187,25 +229,32 @@ export function createWorkRegistry(definitions: ReadonlyArray<WorkDefinition>) {
       if (work.introduction.slug === readingSlug) {
         return {
           id: work.introduction.id,
-          number: "前導",
+          number: locale === "zh-Hans" ? "前导" : "前導",
           slug: work.introduction.slug,
-          title: work.introduction.title,
+          title: locale === "zh-Hans" ? simplifiedCancan.introductionTitle : work.introduction.title,
           contentVersion: work.introduction.contentVersion,
           kind: "introduction",
           availability: "public",
-          paragraphs: work.introduction.paragraphs,
+          paragraphs: locale === "zh-Hans"
+            ? work.introduction.paragraphs.map((paragraph, index) => ({
+                ...paragraph,
+                text: simplifiedCancan.introductionParagraphs[index],
+              }))
+            : work.introduction.paragraphs,
         };
       }
 
       const chapter = work.chapters.find(({ slug }) => slug === readingSlug);
       if (!chapter) return undefined;
-      const availability = getChapterAvailability(work, chapter);
+      const availability = getChapterAvailability(work, chapter, locale);
 
       return {
         id: chapter.id,
         number: String(chapter.order).padStart(2, "0"),
         slug: chapter.slug,
-        title: chapter.title,
+        title: locale === "zh-Hans"
+          ? simplifiedCancan.chapterTitles[chapter.order - 1]
+          : chapter.title,
         contentVersion: chapter.contentVersion,
         kind: "chapter",
         availability,
@@ -218,14 +267,14 @@ export function createWorkRegistry(definitions: ReadonlyArray<WorkDefinition>) {
 
 const publicWorks = createWorkRegistry(works);
 
-export function getPublicWorks() {
-  return publicWorks.list();
+export function getPublicWorks(locale: SiteLocale = "zh-Hant") {
+  return publicWorks.list(locale);
 }
 
-export function getPublicWork(slug: string) {
-  return publicWorks.getWork(slug);
+export function getPublicWork(slug: string, locale: SiteLocale = "zh-Hant") {
+  return publicWorks.getWork(slug, locale);
 }
 
-export function getPublicReading(workSlug: string, readingSlug: string) {
-  return publicWorks.getReading(workSlug, readingSlug);
+export function getPublicReading(workSlug: string, readingSlug: string, locale: SiteLocale = "zh-Hant") {
+  return publicWorks.getReading(workSlug, readingSlug, locale);
 }

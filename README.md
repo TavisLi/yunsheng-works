@@ -9,7 +9,9 @@
 - 三個附插畫的公開場景節選
 - 作品前導與第一章免費試讀
 - 支援字體大小、日夜模式與本機閱讀進度的網頁閱讀器
-- Sign in with ChatGPT 讀者帳號與跨裝置閱讀狀態同步
+- 繁體中文／簡體中文穩定網址、語言切換與雙語 metadata
+- Email、手機密碼帳號，以及其他地區保留的 Sign in with ChatGPT
+- 登入讀者跨裝置閱讀狀態同步
 - D1 持久化讀者資料與購買記錄唯讀介面
 - 未開放章節不向瀏覽器傳送正文的內容保護邊界
 
@@ -70,11 +72,12 @@ worker/                 Cloudflare Worker 入口
 
 | 路由 | 用途 |
 | --- | --- |
-| `/` | 品牌首頁（Brand home） |
+| `/zh-Hant`、`/zh-Hans` | 雙語品牌首頁（Brand home） |
 | `/works/cancan-lierixia` | 《燦燦烈日下》作品展示頁（Work page） |
 | `/works/cancan-lierixia/scenes/[sceneSlug]` | 場景節選詳情 |
 | `/read/[workSlug]/[chapterSlug]` | 網頁閱讀器或未開放章節提示 |
 | `/account` | 登入後的讀者帳號與購買記錄 |
+| `/account/sign-in` | 依中國大陸／其他地區顯示可用登入方式 |
 | `/api/reader-state` | 登入讀者的閱讀狀態查詢與冪等同步 |
 | `/api/purchases` | 登入讀者的購買記錄唯讀查詢 |
 
