@@ -720,7 +720,8 @@ test("server-renders the Yunsheng Works brand home with both unreleased works", 
   assert.match(html, /href="\/zh-Hant\/works\/those-little-things"/);
   assert.match(html, /href="\/zh-Hant\/works\/cancan-lierixia"/);
   assert.match(html, /href="\/zh-Hant\/account"[^>]*>讀者帳號<\/a>/);
-  assert.match(html, /those-little-things\/cover-final\.jpg/);
+  assert.match(html, /those-little-things\/cover-traditional\.png/);
+  assert.match(html, /<source media="\(max-width: 720px\)" srcSet="\/those-little-things\/still-01-rain-umbrella\.png"/);
   assert.match(html, /casting-concept-ensemble\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
@@ -738,6 +739,8 @@ test("unprefixed public links choose and remember a supported locale", async () 
   const html = await simplified.text();
   assert.match(html, /<html lang="zh-Hans">/i);
   assert.match(html, /故事从这里出生/);
+  assert.match(html, /those-little-things\/cover-simplified\.jpg/);
+  assert.doesNotMatch(html, /those-little-things\/cover-traditional\.png/);
   assert.match(html, /href="\/zh-Hant"[^>]*lang="zh-Hant"/);
   assert.match(html, /hreflang="zh-Hans"/i);
   assert.match(html, /hreflang="zh-Hant"/i);
@@ -803,7 +806,7 @@ test("server-renders the dedicated Those Little Things work page", async () => {
   const html = await response.text();
   assert.match(html, /<title>那些有關於他的小事｜允生作品<\/title>/i);
   assert.match(html, /2022 創作 · 尚未正式發佈/);
-  assert.match(html, /those-little-things\/cover-final\.jpg/);
+  assert.match(html, /those-little-things\/cover-traditional\.png/);
   assert.match(html, /those-little-things\/still-01-rain-umbrella\.png/);
   assert.match(html, /those-little-things\/still-02-cafe-trio\.png/);
   assert.match(html, /those-little-things\/cast-ensemble\.png/);
@@ -813,8 +816,16 @@ test("server-renders the dedicated Those Little Things work page", async () => {
   assert.match(html, /趙今麥/);
   assert.match(html, /第一章｜你借了我們一把傘/);
   assert.match(html, /href="\/zh-Hant\/read\/those-little-things\/chapter-01"/);
-  assert.match(html, /第二章｜可終究我不是她/);
   assert.match(html, /目前僅開放作品前導與第一章免費試讀/);
+  assert.doesNotMatch(html, /第二章｜可終究我不是她/);
+  assert.doesNotMatch(html, /尚未開放/);
+
+  const simplifiedResponse = await render("/zh-Hans/works/those-little-things");
+  assert.equal(simplifiedResponse.status, 200);
+  const simplifiedHtml = await simplifiedResponse.text();
+  assert.match(simplifiedHtml, /那些有关于他的小事/);
+  assert.match(simplifiedHtml, /those-little-things\/cover-simplified\.jpg/);
+  assert.doesNotMatch(simplifiedHtml, /those-little-things\/cover-traditional\.png/);
 });
 
 test("server-renders all three illustrated scene excerpts", async () => {

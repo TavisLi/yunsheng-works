@@ -74,12 +74,23 @@ export function BrandHome({ locale = "zh-Hant" }: { locale?: SiteLocale }) {
           <article className="brandWorkCard" key={work.id}>
             <a
               className="brandWorkImage"
+              data-work-slug={work.slug}
               href={localePath(locale, `/works/${work.slug}`)}
               aria-label={copy(`進入《${work.title}》作品頁`, `进入《${work.title}》作品页`)}
             >
               {/* Keep public artwork paths; vinext serves them directly without a loader. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={work.cover.src} alt={work.cover.alt} />
+              <picture>
+                {work.cover.mobileSrc ? (
+                  <source
+                    media="(max-width: 720px)"
+                    srcSet={work.cover.mobileSrc}
+                  />
+                ) : null}
+                <img
+                  src={work.cover.src}
+                  alt={work.cover.alt}
+                />
+              </picture>
               <span>WORK {String(index + 1).padStart(3, "0")}</span>
             </a>
             <div className="brandWorkCopy">

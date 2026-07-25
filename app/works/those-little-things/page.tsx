@@ -99,7 +99,10 @@ export default function ThoseLittleThingsPage({ locale }: { locale?: SiteLocale 
   const copy = <T,>(traditional: T, simplified: T) => localized(activeLocale, traditional, simplified);
   const path = (value: string) => locale ? localePath(locale, value) : value;
   const work = getWork(activeLocale);
-  const catalogEntries = [work.introduction, ...work.chapters];
+  const catalogEntries = [work.introduction, ...work.chapters].filter(
+    (chapter) =>
+      chapter.availability === "public" || chapter.availability === "preview",
+  );
 
   return (
     <main className="littleThingsPage">
@@ -244,8 +247,8 @@ export default function ThoseLittleThingsPage({ locale }: { locale?: SiteLocale 
           </div>
           <p>
             {copy(
-              "目前僅開放作品前導與第一章免費試讀。其餘章節將在作者確認正式公開節奏後，才會逐章開放。",
-              "目前仅开放作品前导与第一章免费试读。其余章节将在作者确认正式公开节奏后，才会逐章开放。",
+              "目前僅開放作品前導與第一章免費試讀。",
+              "目前仅开放作品前导与第一章免费试读。",
             )}
           </p>
         </div>

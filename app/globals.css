@@ -52,7 +52,10 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--red); outline-o
 .brandWorkCard { display: grid; grid-template-columns: 1.12fr .88fr; min-height: 570px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .brandWorkImage { position: relative; overflow: hidden; min-height: 520px; background: var(--uniform); }
 .brandWorkImage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 45%, rgba(246,183,60,.42)); pointer-events: none; }
+.brandWorkImage picture { display: block; width: 100%; height: 100%; }
 .brandWorkImage img { width: 100%; height: 100%; object-fit: cover; object-position: right center; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.brandWorkImage[data-work-slug="those-little-things"] { background: #d6dde7; }
+.brandWorkImage[data-work-slug="those-little-things"] img { object-fit: contain; object-position: center; }
 .brandWorkImage:hover img { transform: scale(1.025); }
 .brandWorkImage span { position: absolute; z-index: 2; left: 20px; top: 20px; padding: 9px 11px; color: var(--jasmine); background: var(--red); font: 700 9px/1 "Courier New", monospace; letter-spacing: .15em; }
 .brandWorkCopy { align-self: center; padding: 60px clamp(35px,5vw,85px); }
@@ -658,6 +661,7 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
   .brandWorksHeader > p { font-size: 13px; }
   .brandWorkCard { min-height: 0; }
   .brandWorkImage { min-height: 0; }
+  .brandWorkImage[data-work-slug="those-little-things"] img { object-fit: cover; object-position: center; }
   .brandWorkCopy { padding: 42px 6px 52px; }
   .brandWorkCopy h3 { font-size: 58px; }
   .brandFooter { flex-direction: column; gap: 10px; padding: 22px 20px; }

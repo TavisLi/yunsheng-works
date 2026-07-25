@@ -23,7 +23,12 @@ export type WorkDefinition = {
   slug: string;
   title: string;
   author: string;
-  cover: { src: string; alt: string };
+  cover: {
+    src: string;
+    alt: string;
+    mobileSrc?: string;
+    mobileAlt?: string;
+  };
   synopsis: string;
   publicationStatus: string;
   previewChapterCount: PreviewChapterCount;
@@ -63,8 +68,10 @@ const works: ReadonlyArray<WorkDefinition> = [
     title: "那些有關於他的小事",
     author: "允生",
     cover: {
-      src: "/those-little-things/cover-final.jpg",
-      alt: "《那些有關於他的小事》封面定版",
+      src: "/those-little-things/cover-traditional.png",
+      alt: "《那些有關於他的小事》繁體中文版封面",
+      mobileSrc: "/those-little-things/still-01-rain-umbrella.png",
+      mobileAlt: "魏自清在雨中借傘給林允生與林允西的電影劇照",
     },
     synopsis:
       "2022 年創作的第一部長篇小說。從一把雨傘、一間咖啡店與一對雙生姊妹開始，寫青春裡被愛、虧欠、失去與重逢反覆照亮的小事。",
@@ -231,7 +238,10 @@ const simplifiedCancan = {
 const simplifiedThoseLittleThings = {
   editorialVersion: "zh-Hans-promo-v1",
   title: "那些有关于他的小事",
-  coverAlt: "《那些有关于他的小事》封面定版",
+  coverSrc: "/those-little-things/cover-simplified.jpg",
+  coverAlt: "《那些有关于他的小事》简体中文版封面",
+  mobileCoverSrc: "/those-little-things/still-01-rain-umbrella.png",
+  mobileCoverAlt: "魏自清在雨中借伞给林允生与林允西的电影剧照",
   synopsis:
     "2022 年创作的第一部长篇小说。从一把雨伞、一间咖啡店与一对双生姐妹开始，写青春里被爱、亏欠、失去与重逢反复照亮的小事。",
   publicationStatus: "长篇小说 · 2022 创作 · 尚未正式发布",
@@ -281,7 +291,10 @@ function validateLocalizedPublicContent() {
     simplifiedThoseLittleThings.chapterTitles.length !== thoseLittleThings.chapters.length ||
     [
       simplifiedThoseLittleThings.title,
+      simplifiedThoseLittleThings.coverSrc,
       simplifiedThoseLittleThings.coverAlt,
+      simplifiedThoseLittleThings.mobileCoverSrc,
+      simplifiedThoseLittleThings.mobileCoverAlt,
       simplifiedThoseLittleThings.synopsis,
       simplifiedThoseLittleThings.publicationStatus,
       simplifiedThoseLittleThings.introductionTitle,
@@ -327,7 +340,17 @@ function toPublicWork(work: WorkDefinition, locale: SiteLocale): PublicWork {
     slug: work.slug,
     title: localizedWork?.title ?? work.title,
     author: work.author,
-    cover: localizedWork ? { ...work.cover, alt: localizedWork.coverAlt } : work.cover,
+    cover: simplifiedThoseLittleThingsWork
+      ? {
+          ...work.cover,
+          src: simplifiedThoseLittleThings.coverSrc,
+          alt: simplifiedThoseLittleThings.coverAlt,
+          mobileSrc: simplifiedThoseLittleThings.mobileCoverSrc,
+          mobileAlt: simplifiedThoseLittleThings.mobileCoverAlt,
+        }
+      : localizedWork
+        ? { ...work.cover, alt: localizedWork.coverAlt }
+        : work.cover,
     synopsis: localizedWork?.synopsis ?? work.synopsis,
     publicationStatus: localizedWork?.publicationStatus ?? work.publicationStatus,
     previewChapterCount: work.previewChapterCount,
