@@ -319,16 +319,17 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
 .littleHero {
   position: relative;
   isolation: isolate;
-  min-height: 100svh;
+  min-height: 92svh;
   overflow: hidden;
   display: grid;
-  grid-template-columns: minmax(380px, .8fr) minmax(260px, .38fr) minmax(420px, .82fr);
-  gap: 3vw;
+  grid-template-columns: minmax(360px, .88fr) minmax(520px, 1.12fr);
+  gap: clamp(44px, 5vw, 88px);
   align-items: center;
-  padding: 120px 4vw 70px;
+  padding: 128px 4vw 86px;
   color: var(--little-paper);
   background:
-    linear-gradient(110deg, rgba(21, 33, 35, .97) 0 52%, rgba(37, 63, 58, .82) 100%),
+    radial-gradient(circle at 78% 58%, rgba(83, 116, 128, .35), transparent 28%),
+    linear-gradient(112deg, rgba(15, 30, 32, .98) 0 47%, rgba(29, 64, 60, .9) 68%, rgba(50, 82, 88, .86) 100%),
     var(--little-green);
 }
 
@@ -346,23 +347,24 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
 
 .littleHeroCopy {
   position: relative;
-  z-index: 3;
+  z-index: 4;
+  max-width: 620px;
 }
 
 .littleHero h1 {
-  max-width: 6em;
+  max-width: 5.4em;
   margin: 0;
   font-family: var(--serif);
-  font-size: clamp(64px, 8vw, 132px);
+  font-size: 6.7rem;
   font-weight: 500;
-  line-height: 1.03;
-  letter-spacing: -.045em;
+  line-height: 1.04;
+  letter-spacing: 0;
 }
 
 .littleHeroLead {
-  margin: 34px 0 18px;
+  margin: 30px 0 18px;
   font-family: var(--serif);
-  font-size: clamp(24px, 2.3vw, 38px);
+  font-size: 2rem;
   line-height: 1.55;
 }
 
@@ -375,10 +377,15 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
 
 .littleCover {
   position: relative;
-  z-index: 3;
-  margin: 0;
-  transform: rotate(-1.5deg);
-  filter: drop-shadow(18px 28px 32px rgba(0,0,0,.28));
+  z-index: 4;
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+  justify-self: start;
+  width: min(24vw, 285px);
+  margin: 0 0 -36px -42px;
+  transform: rotate(-2deg);
+  filter: drop-shadow(18px 26px 30px rgba(0,0,0,.34));
 }
 
 .littleCover img {
@@ -397,15 +404,20 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
 .littleHeroStill {
   position: relative;
   z-index: 2;
-  margin: 8vh -13vw 0 0;
-  transform: rotate(1.2deg);
-  box-shadow: -18px 26px 0 rgba(141, 63, 61, .48);
+  grid-column: 2;
+  grid-row: 1;
+  width: min(58vw, 860px);
+  margin: 0 -12vw 0 0;
+  overflow: hidden;
+  transform: rotate(.8deg);
+  box-shadow: -18px 22px 0 rgba(141, 63, 61, .5), 0 28px 70px rgba(0,0,0,.28);
 }
 
 .littleHeroStill img {
   aspect-ratio: 2.35 / 1;
   object-fit: cover;
   object-position: center;
+  filter: saturate(.92) contrast(.96);
 }
 
 .littleStory {
@@ -619,16 +631,26 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
   .littleNav > div { gap: 18px; }
   .littleNav > span { display: none; }
   .littleHero {
-    grid-template-columns: 1fr .55fr;
+    grid-template-columns: 1fr;
     align-content: center;
-    min-height: 980px;
+    min-height: 0;
+    padding-top: 120px;
   }
-  .littleHeroCopy { max-width: 640px; }
+  .littleHeroCopy { max-width: 650px; }
+  .littleHero h1 { font-size: 5.6rem; }
+  .littleHeroLead { font-size: 1.75rem; }
   .littleHeroStill {
-    grid-column: 1 / -1;
+    grid-column: 1;
+    grid-row: auto;
     justify-self: end;
-    width: 78vw;
-    margin: -4vh -18vw 0 0;
+    width: min(92vw, 760px);
+    margin: 56px -18vw 0 0;
+  }
+  .littleCover {
+    grid-column: 1;
+    grid-row: auto;
+    width: min(34vw, 250px);
+    margin: -180px 0 0 4vw;
   }
   .littleStoryGrid,
   .littleCastingGrid {
@@ -673,17 +695,17 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
   .littleHero {
     display: block;
     min-height: 0;
-    padding: 120px 20px 74px;
+    padding: 118px 20px 74px;
   }
-  .littleHero h1 { font-size: clamp(58px, 17vw, 86px); }
-  .littleHeroLead { font-size: 25px; }
+  .littleHero h1 { max-width: 4.8em; font-size: 4.3rem; }
+  .littleHeroLead { font-size: 1.55rem; }
   .littleCover {
-    width: min(68vw, 290px);
-    margin-top: 44px;
+    width: min(48vw, 210px);
+    margin: -118px 0 0 0;
   }
   .littleHeroStill {
-    width: 106vw;
-    margin: 34px -28vw 0 auto;
+    width: 108vw;
+    margin: 42px -34vw 0 auto;
   }
   .littleStoryGrid { display: block; padding: 55px 0 20px; }
   .littleStoryGrid > p { font-size: 36px; }
