@@ -700,7 +700,7 @@ test("the signed-in account page provisions a reader and shows purchase history"
   );
 });
 
-test("server-renders the Yunsheng Works brand home with its first work", async () => {
+test("server-renders the Yunsheng Works brand home with both unreleased works", async () => {
   const response = await render("/zh-Hant");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -714,10 +714,13 @@ test("server-renders the Yunsheng Works brand home with its first work", async (
   assert.match(html, /故事從這裡出生/);
   assert.match(
     html,
-    /《(?:<!-- -->)?燦燦烈日下(?:<!-- -->)?》是允生的第一部作品/,
+    /《(?:<!-- -->)?那些有關於他的小事(?:<!-- -->)?》是允生的第一部小說/,
   );
+  assert.match(html, /兩部作品目前均尚未正式發佈/);
+  assert.match(html, /href="\/zh-Hant\/works\/those-little-things"/);
   assert.match(html, /href="\/zh-Hant\/works\/cancan-lierixia"/);
   assert.match(html, /href="\/zh-Hant\/account"[^>]*>讀者帳號<\/a>/);
+  assert.match(html, /those-little-things\/cover-final\.jpg/);
   assert.match(html, /casting-concept-ensemble\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
@@ -793,6 +796,27 @@ test("server-renders the dedicated Cancan Lierixia work page", async () => {
   assert.doesNotMatch(html, /完整手稿不會放入網站或公開下載/);
 });
 
+test("server-renders the dedicated Those Little Things work page", async () => {
+  const response = await render("/zh-Hant/works/those-little-things");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /<title>那些有關於他的小事｜允生作品<\/title>/i);
+  assert.match(html, /2022 創作 · 尚未正式發佈/);
+  assert.match(html, /those-little-things\/cover-final\.jpg/);
+  assert.match(html, /those-little-things\/still-01-rain-umbrella\.png/);
+  assert.match(html, /those-little-things\/still-02-cafe-trio\.png/);
+  assert.match(html, /those-little-things\/cast-ensemble\.png/);
+  assert.match(html, /讀者想像選角/);
+  assert.match(html, /不代表任何演員、經紀公司或製作方參與、授權或合作/);
+  assert.match(html, /易烊千璽/);
+  assert.match(html, /趙今麥/);
+  assert.match(html, /第一章｜你借了我們一把傘/);
+  assert.match(html, /href="\/zh-Hant\/read\/those-little-things\/chapter-01"/);
+  assert.match(html, /第二章｜可終究我不是她/);
+  assert.match(html, /目前僅開放作品前導與第一章免費試讀/);
+});
+
 test("server-renders all three illustrated scene excerpts", async () => {
   const cases = [
     {
@@ -829,6 +853,26 @@ test("server-renders all three illustrated scene excerpts", async () => {
     assert.ok(html.includes(scene.excerpt));
     assert.match(html, /href="\/zh-Hant\/works\/cancan-lierixia#scenes"/);
   }
+});
+
+test("server-renders Those Little Things first chapter only as a free preview", async () => {
+  const response = await render("/zh-Hant/read/those-little-things/chapter-01");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /<title>第一章｜你借了我們一把傘｜那些有關於他的小事<\/title>/i);
+  assert.match(html, /FREE PREVIEW · 免費試讀/);
+  assert.match(html, /從很小的時候開始，媽媽就偏愛姊姊比較多/);
+  assert.match(html, /十七歲的允生和允西，遇上了十七歲的魏自清/);
+  assert.match(html, /試讀內容到這裡/);
+  assert.match(html, /href="\/zh-Hant\/read\/those-little-things\/prologue"/);
+
+  const lockedResponse = await render("/zh-Hant/read/those-little-things/chapter-02");
+  assert.equal(lockedResponse.status, 200);
+  const lockedHtml = await lockedResponse.text();
+  assert.match(lockedHtml, /本章尚未開放/);
+  assert.doesNotMatch(lockedHtml, /可終究我不是她正文/);
+  assert.doesNotMatch(lockedHtml, /readerProse/);
 });
 
 test("server-renders the public prologue in the web reader", async () => {
@@ -1064,6 +1108,7 @@ test("git ignores private manuscript formats without excluding approved previews
         "check-ignore",
         "--no-index",
         "app/content/previews/cancan-lierixia-chapter-01.js",
+        "app/content/previews/those-little-things-chapter-01.js",
       ],
       { cwd },
     ),

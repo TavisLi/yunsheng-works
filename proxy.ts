@@ -13,7 +13,8 @@ export function proxy(request: NextRequest) {
     requestHeaders.set("x-yunsheng-locale", firstSegment);
     const localizedRouteExists =
       pathname === `/${firstSegment}` ||
-      pathname === `/${firstSegment}/works/cancan-lierixia`;
+      pathname === `/${firstSegment}/works/cancan-lierixia` ||
+      pathname === `/${firstSegment}/works/those-little-things`;
     const target = request.nextUrl.clone();
     target.pathname = pathname.slice(firstSegment.length + 1) || "/";
     const response = localizedRouteExists

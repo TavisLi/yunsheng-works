@@ -26,7 +26,7 @@ export function BrandHome({ locale = "zh-Hant" }: { locale?: SiteLocale }) {
           <a href={localePath(locale, "/account")}>{copy("讀者帳號", "读者账号")}</a>
           <LanguageSwitcher locale={locale} path="/" />
         </div>
-        <span>ORIGINAL STORIES · SINCE 2026</span>
+        <span>ORIGINAL STORIES · SINCE 2022</span>
       </nav>
 
       <section className="brandHero" id="top">
@@ -52,20 +52,20 @@ export function BrandHome({ locale = "zh-Hant" }: { locale?: SiteLocale }) {
           </a>
         </div>
         <p className="brandMarginNote" aria-hidden="true">
-          AUTHOR&apos;S ARCHIVE<br />{copy("卷一，自烈日下開始", "卷一，自烈日下开始")}
+          AUTHOR&apos;S ARCHIVE<br />{copy("從第一部小說開始", "从第一部小说开始")}
         </p>
       </section>
 
       <section className="brandWorks" id="works" aria-labelledby="works-title">
         <header className="brandWorksHeader">
           <div>
-            <p className="eyebrow">PUBLISHED WORKS · {copy("已發佈作品", "已发布作品")}</p>
+            <p className="eyebrow">WORKS ARCHIVE · {copy("作品檔案", "作品档案")}</p>
             <h2 id="works-title">{copy("每個故事，", "每个故事，")}<br />{copy("都有自己的入口。", "都有自己的入口。")}</h2>
           </div>
           <p>
             {copy(
-              `《${firstWork.title}》是允生的第一部作品。往後的每一部小說，都會在這裡擁有獨立、完整而可長久保存的網頁。`,
-              `《${firstWork.title}》是允生的第一部作品。往后的每一部小说，都会在这里拥有独立、完整而可长久保存的网页。`,
+              `《${firstWork.title}》是允生的第一部小說。兩部作品目前均尚未正式發佈；每一部都會在這裡擁有獨立、完整而可長久保存的網頁。`,
+              `《${firstWork.title}》是允生的第一部小说。两部作品目前均尚未正式发布；每一部都会在这里拥有独立、完整而可长久保存的网页。`,
             )}
           </p>
         </header>
@@ -85,8 +85,10 @@ export function BrandHome({ locale = "zh-Hant" }: { locale?: SiteLocale }) {
             <div className="brandWorkCopy">
               <p>{work.publicationStatus}</p>
               <h3>{work.title}</h3>
-              {index === 0 ? (
+              {work.slug === "cancan-lierixia" ? (
                 <blockquote>{copy("有些人陪你長大，有些人教你告別。", "有些人陪你长大，有些人教你告别。")}</blockquote>
+              ) : work.slug === "those-little-things" ? (
+                <blockquote>{copy("有些小事，後來成了一生。", "有些小事，后来成了一生。")}</blockquote>
               ) : null}
               <p className="brandWorkSummary">{work.synopsis}</p>
               <a

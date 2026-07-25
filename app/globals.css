@@ -269,6 +269,328 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--red); outline-o
 .darkButton { color: var(--ink); background: transparent; border-color: var(--ink); }
 footer { display: flex; justify-content: space-between; padding: 22px 4vw; color: var(--jasmine); background: var(--night); font-size: 10px; letter-spacing: .13em; }
 
+.littleThingsPage {
+  --little-ink: #192426;
+  --little-green: #253f3a;
+  --little-mist: #d9ddd4;
+  --little-paper: #f4efe4;
+  --little-red: #8d3f3d;
+  --little-line: rgba(25, 36, 38, .2);
+  min-height: 100svh;
+  color: var(--little-ink);
+  background: var(--little-paper);
+}
+
+.littleNav {
+  position: absolute;
+  z-index: 20;
+  inset: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 26px 4vw;
+  color: var(--little-paper);
+  font-size: 11px;
+  letter-spacing: .14em;
+}
+
+.littleNav > a {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+
+.littleNav > div {
+  display: flex;
+  gap: 26px;
+}
+
+.littleNav > span {
+  justify-self: end;
+  color: rgba(244, 239, 228, .72);
+  font: 600 9px/1.2 "Courier New", monospace;
+  letter-spacing: .16em;
+}
+
+.littleHero {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(380px, .8fr) minmax(260px, .38fr) minmax(420px, .82fr);
+  gap: 3vw;
+  align-items: center;
+  padding: 120px 4vw 70px;
+  color: var(--little-paper);
+  background:
+    linear-gradient(110deg, rgba(21, 33, 35, .97) 0 52%, rgba(37, 63, 58, .82) 100%),
+    var(--little-green);
+}
+
+.littleHero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: .18;
+  background-image:
+    linear-gradient(90deg, rgba(244,239,228,.12) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(244,239,228,.1) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.littleHeroCopy {
+  position: relative;
+  z-index: 3;
+}
+
+.littleHero h1 {
+  max-width: 6em;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(64px, 8vw, 132px);
+  font-weight: 500;
+  line-height: 1.03;
+  letter-spacing: -.045em;
+}
+
+.littleHeroLead {
+  margin: 34px 0 18px;
+  font-family: var(--serif);
+  font-size: clamp(24px, 2.3vw, 38px);
+  line-height: 1.55;
+}
+
+.littleHeroCopy > p:not(.eyebrow):not(.littleHeroLead) {
+  max-width: 560px;
+  color: rgba(244, 239, 228, .76);
+  font-size: 15px;
+  line-height: 2;
+}
+
+.littleCover {
+  position: relative;
+  z-index: 3;
+  margin: 0;
+  transform: rotate(-1.5deg);
+  filter: drop-shadow(18px 28px 32px rgba(0,0,0,.28));
+}
+
+.littleCover img {
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border: 9px solid rgba(244,239,228,.9);
+}
+
+.littleCover figcaption {
+  padding-top: 12px;
+  color: rgba(244,239,228,.7);
+  font: 600 9px/1 "Courier New", monospace;
+  letter-spacing: .16em;
+}
+
+.littleHeroStill {
+  position: relative;
+  z-index: 2;
+  margin: 8vh -13vw 0 0;
+  transform: rotate(1.2deg);
+  box-shadow: -18px 26px 0 rgba(141, 63, 61, .48);
+}
+
+.littleHeroStill img {
+  aspect-ratio: 2.35 / 1;
+  object-fit: cover;
+  object-position: center;
+}
+
+.littleStory {
+  background:
+    linear-gradient(90deg, rgba(37,63,58,.08), transparent 36%),
+    var(--little-paper);
+}
+
+.littleStoryGrid {
+  display: grid;
+  grid-template-columns: 1fr .88fr;
+  gap: 9vw;
+  padding: 76px 4vw 25px;
+}
+
+.littleStoryGrid > p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(34px, 4.4vw, 72px);
+  line-height: 1.35;
+  letter-spacing: -.025em;
+}
+
+.littleStoryGrid div {
+  align-self: end;
+  color: rgba(25,36,38,.74);
+  font-size: 16px;
+  line-height: 2.05;
+}
+
+.littleStoryGrid div p + p {
+  margin-top: 28px;
+}
+
+.littleStills {
+  color: var(--little-paper);
+  background: #18272a;
+}
+
+.littleStills h2 {
+  margin: 64px 0 52px;
+  font-family: var(--serif);
+  font-size: clamp(54px, 7vw, 108px);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -.04em;
+}
+
+.littleStillGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.littleStillGrid article {
+  border: 1px solid rgba(244,239,228,.18);
+  background: rgba(244,239,228,.06);
+}
+
+.littleStillGrid article:first-child {
+  grid-column: 1 / -1;
+}
+
+.littleStillGrid img {
+  aspect-ratio: 2.35 / 1;
+  object-fit: cover;
+}
+
+.littleStillGrid div {
+  padding: 24px 26px 28px;
+}
+
+.littleStillGrid h3 {
+  margin: 0 0 12px;
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.littleStillGrid p {
+  max-width: 680px;
+  margin: 0;
+  color: rgba(244,239,228,.72);
+  font-size: 13px;
+  line-height: 1.85;
+}
+
+.littleCasting {
+  color: var(--little-ink);
+  background: var(--little-mist);
+}
+
+.littleCastingGrid {
+  display: grid;
+  grid-template-columns: .8fr 1fr;
+  gap: 6vw;
+  align-items: center;
+  margin: 72px 4vw 55px;
+}
+
+.littleCastingGrid h2 {
+  margin: 0 0 28px;
+  font-family: var(--serif);
+  font-size: clamp(50px, 6vw, 92px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -.04em;
+}
+
+.littleCastingGrid p {
+  max-width: 520px;
+  color: rgba(25,36,38,.7);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.littleCastingGrid figure {
+  margin: 0;
+  box-shadow: 18px 22px 0 rgba(37,63,58,.22);
+}
+
+.littleCastingGrid img {
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.littleCastList {
+  border-top: 1px solid var(--little-line);
+}
+
+.littleCastList article {
+  display: grid;
+  grid-template-columns: 58px .7fr .55fr 1.3fr;
+  gap: 3vw;
+  align-items: center;
+  padding: 28px 1vw;
+  border-bottom: 1px solid var(--little-line);
+}
+
+.littleCastList span {
+  color: var(--little-red);
+  font: 700 10px/1 "Courier New", monospace;
+}
+
+.littleCastList h3 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.littleCastList strong {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.littleCastList p {
+  margin: 0;
+  color: rgba(25,36,38,.72);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.littleClosing {
+  min-height: 72svh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--little-paper);
+  background:
+    linear-gradient(rgba(25,36,38,.62), rgba(25,36,38,.82)),
+    url("/those-little-things/still-05-station-reunion.png") center / cover;
+}
+
+.littleClosing p {
+  margin: 0;
+  font: 600 10px/1.2 "Courier New", monospace;
+  letter-spacing: .22em;
+}
+
+.littleClosing blockquote {
+  margin: 28px 0 34px;
+  font-family: var(--serif);
+  font-size: clamp(44px, 6.5vw, 96px);
+  line-height: 1.18;
+}
+
 @keyframes sunBreath { 0%,100% { transform: scale(1); filter: saturate(1); } 50% { transform: scale(1.025); filter: saturate(1.08); } }
 @keyframes noteFloat { 0%,100% { transform: rotate(-4deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-8px); } }
 
@@ -290,6 +612,32 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
   .characterRow p { grid-column: 3; }
   .catalogHeader { grid-template-columns: 1fr; gap: 35px; }
   .catalogHeader > p { max-width: 620px; }
+  .littleNav { grid-template-columns: 1fr auto; }
+  .littleNav > div { gap: 18px; }
+  .littleNav > span { display: none; }
+  .littleHero {
+    grid-template-columns: 1fr .55fr;
+    align-content: center;
+    min-height: 980px;
+  }
+  .littleHeroCopy { max-width: 640px; }
+  .littleHeroStill {
+    grid-column: 1 / -1;
+    justify-self: end;
+    width: 78vw;
+    margin: -4vh -18vw 0 0;
+  }
+  .littleStoryGrid,
+  .littleCastingGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .littleCastList article {
+    grid-template-columns: 42px .7fr .7fr;
+  }
+  .littleCastList p {
+    grid-column: 2 / -1;
+  }
 }
 
 @media (max-width: 720px) {
@@ -316,6 +664,45 @@ footer { display: flex; justify-content: space-between; padding: 22px 4vw; color
   .nav { grid-template-columns: 1fr auto; padding: 20px; }
   .navLinks { display: none; }
   .navStatus { font-size: 9px; }
+  .littleNav { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
+  .littleNav > div { flex-wrap: wrap; gap: 14px 18px; font-size: 10px; }
+  .littleHero {
+    display: block;
+    min-height: 0;
+    padding: 120px 20px 74px;
+  }
+  .littleHero h1 { font-size: clamp(58px, 17vw, 86px); }
+  .littleHeroLead { font-size: 25px; }
+  .littleCover {
+    width: min(68vw, 290px);
+    margin-top: 44px;
+  }
+  .littleHeroStill {
+    width: 106vw;
+    margin: 34px -28vw 0 auto;
+  }
+  .littleStoryGrid { display: block; padding: 55px 0 20px; }
+  .littleStoryGrid > p { font-size: 36px; }
+  .littleStoryGrid div { margin-top: 36px; font-size: 14px; }
+  .littleStills h2 { margin: 48px 0 36px; font-size: 52px; }
+  .littleStillGrid { grid-template-columns: 1fr; }
+  .littleStillGrid article:first-child { grid-column: auto; }
+  .littleStillGrid div { padding: 22px 20px 25px; }
+  .littleCastingGrid { display: block; margin: 52px 0 42px; }
+  .littleCastingGrid h2 { font-size: 50px; }
+  .littleCastingGrid figure { margin-top: 34px; }
+  .littleCastList article {
+    grid-template-columns: 34px 1fr;
+    gap: 12px 18px;
+    padding: 24px 0;
+  }
+  .littleCastList h3 { font-size: 27px; }
+  .littleCastList strong,
+  .littleCastList p {
+    grid-column: 2;
+  }
+  .littleClosing { min-height: 620px; }
+  .littleClosing blockquote { font-size: 43px; }
   .hero { min-height: 940px; padding: 105px 20px 85px; align-content: start; background: linear-gradient(160deg,#fff9e9 0 52%,#efbd59 100%); }
   .sun { right: -60vw; top: 29vh; width: 140vw; height: 140vw; }
   .hero h1 { font-size: clamp(70px, 24vw, 108px); line-height: .82; }
