@@ -4,7 +4,7 @@
 
 本文件說明「允生作品」網站目前的技術架構、內容邊界、執行流程與擴充接點，供後續開發、審查與維運使用。
 
-本站目前是以《燦燦烈日下》為第一部作品的公開品牌與閱讀網站，已提供讀者帳號、跨裝置閱讀狀態與購買記錄唯讀查詢。它仍不是完整的出版電商平台：內容後台、支付、訂單建立與完整電子書解鎖尚未建立。
+本站目前是允生原創小說的公開品牌與閱讀網站，已提供《那些有關於他的小事》與《燦燦烈日下》作品頁、讀者帳號、跨裝置閱讀狀態與購買記錄唯讀查詢。兩部作品目前均尚未正式發佈；本站仍不是完整的出版電商平台：內容後台、支付、訂單建立與完整電子書解鎖尚未建立。
 
 產品術語與長期邊界以根目錄的 [`CONTEXT.md`](../CONTEXT.md) 為準。
 
@@ -46,11 +46,12 @@ flowchart LR
 ### 4.1 路由與頁面
 
 - `/`：品牌首頁（Brand home），介紹「允生作品」並導向各作品。
+- `/works/those-little-things`：《那些有關於他的小事》作品展示頁（Work page），包含故事、電影劇照、讀者想像選角與章節目錄。
 - `/works/cancan-lierixia`：《燦燦烈日下》作品展示頁（Work page），包含故事、人物、概念選角、場景與章節目錄。
 - `/works/cancan-lierixia/scenes/[sceneSlug]`：公開場景節選詳情；建置時依場景內容產生穩定路徑。
 - `/read/[workSlug]/[chapterSlug]`：網頁閱讀器或未開放章節提示頁。
 
-根佈局統一管理繁體中文語系、網站 metadata、Open Graph 與 favicon。各作品及動態內容頁再提供自己的標題與摘要。
+公開頁面以 `/zh-Hant` 與 `/zh-Hans` 作為穩定語系前綴。`proxy.ts` 處理無前綴舊連結、語系 cookie 與請求 header；根佈局依 header 設定 `lang`。各公開頁提供本地化標題、摘要、canonical 與 `hreflang`。
 
 ### 4.2 作品內容模型
 
@@ -59,7 +60,7 @@ flowchart LR
 - 作品目錄查詢只回傳作品資料、章節順序、內容版本與公開狀態。
 - 閱讀內容查詢只在章節狀態為「公開閱讀」或「免費試讀」時回傳正文段落。
 
-每部作品以穩定 `slug` 作為網址與內容查詢識別；章節也有自己的穩定 `slug`、順序、內容版本與可讀狀態。免費試讀章數被限制為 1～3 章，目前《燦燦烈日下》開放第一章。
+每部作品以穩定 `slug` 作為網址與內容查詢識別；章節也有自己的穩定 `slug`、順序、內容版本與可讀狀態。免費試讀章數被限制為 1～3 章，目前《那些有關於他的小事》與《燦燦烈日下》均只開放第一章。
 
 場景內容與作品目錄分開管理。每個場景包含穩定 `slug`、圖像、替代文字、參與人物、節選段落與「完稿／草稿」標記，頁面必須向讀者揭露內容狀態。
 
@@ -87,9 +88,9 @@ flowchart LR
 
 ### 4.6 身份與資料庫
 
-身份 adapter 解析 Sites 轉送的 ChatGPT 已驗證 email 與可選顯示名稱，首次登入時自動建立最小化讀者帳號。公開作品與試讀不需登入；`/account`、`/api/reader-state` 與 `/api/purchases` 才使用身份。
+身份 adapter 同時解析第一方 session 與 Sites 轉送的 ChatGPT 已驗證 Email。中國大陸可使用 Email／手機＋密碼，其他地區另保留 ChatGPT。公開作品與試讀不需登入；`/account`、`/api/reader-state` 與 `/api/purchases` 才使用身份。
 
-D1 schema 包含 `reader_accounts`、`reader_states`、`purchase_records` 與 `purchase_entitlements`。閱讀狀態以 `(readerAccountId, workId)` 隔離；購買記錄與權益使用不同資料表。瀏覽器只有閱讀狀態的冪等更新權，以及自己購買記錄的唯讀權，沒有建立購買或權益的接口。所有 schema 變更由 `drizzle/` migration 管理並隨 Sites 部署套用。
+D1 schema 將 `reader_accounts`、`reader_identities`、`reader_password_credentials` 與 `reader_sessions` 分開，並以 `reader_auth_rate_limits` 控制註冊／登入嘗試預算。密碼使用版本化 PBKDF2、每筆 salt 與部署 pepper；session 只儲存 token hash。詳細決策見 [`ADR-0001`](./adr/0001-localized-reader-identity.md)。
 
 ## 5. 請求與建置流程
 

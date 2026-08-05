@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { cancanScenes } from "../../content/scenes";
 import { getPublicWork } from "../../content/works";
+import { localePath, type SiteLocale } from "../../i18n";
+import LanguageSwitcher from "../../language-switcher";
 
 export const metadata: Metadata = {
   title: "燦燦烈日下｜允生作品",
@@ -45,13 +47,12 @@ const characters = [
   },
 ];
 
-export default function Home() {
+export default function Home({ locale }: { locale?: SiteLocale } = {}) {
+  const path = (value: string) => locale ? localePath(locale, value) : value;
   return (
     <main>
       <nav className="nav" aria-label="主要導覽">
-        {/* vinext dev currently duplicates React when next/link is optimized after startup. */}
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a className="wordmark" href="/" aria-label="返回允生作品首頁">
+        <a className="wordmark" href={path("/")} aria-label="返回允生作品首頁">
           允生作品
         </a>
         <div className="navLinks">
@@ -59,7 +60,8 @@ export default function Home() {
           <a href="#characters">人物</a>
           <a href="#casting">概念選角</a>
           <a href="#catalog">試讀</a>
-          <a href="/account?work=cancan-lierixia">讀者帳號</a>
+          <a href={`${path("/account")}?work=cancan-lierixia`}>讀者帳號</a>
+          {locale ? <LanguageSwitcher locale={locale} path="/works/cancan-lierixia" /> : null}
         </div>
         <span className="navStatus">{work.publicationStatus}</span>
       </nav>
@@ -137,7 +139,7 @@ export default function Home() {
           {cancanScenes.map((scene) => (
             <a
               className="sceneCard"
-              href={`/works/cancan-lierixia/scenes/${scene.slug}`}
+              href={path(`/works/cancan-lierixia/scenes/${scene.slug}`)}
               aria-label={`閱讀場景：${scene.title}`}
               key={scene.number}
             >
@@ -241,7 +243,7 @@ export default function Home() {
                   {status}
                 </span>
                 {isReadable ? (
-                  <a href={`/read/${work.slug}/${chapter.slug}`}>
+                  <a href={path(`/read/${work.slug}/${chapter.slug}`)}>
                     開始閱讀 <span aria-hidden="true">→</span>
                   </a>
                 ) : (

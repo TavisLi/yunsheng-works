@@ -5,6 +5,7 @@ import { getDb } from ".";
 import {
   purchaseRecords,
   readerAccounts,
+  readerIdentities,
   readerStates,
 } from "./schema";
 
@@ -16,29 +17,89 @@ export async function provisionReaderAccount(
   const db = getDb();
   const now = new Date().toISOString();
 
+  if (identity.readerAccountId) {
+    const existing = await db.query.readerAccounts.findFirst({
+      where: eq(readerAccounts.id, identity.readerAccountId),
+    });
+    if (!existing) throw new Error("讀者帳號不存在");
+    return existing;
+  }
+
+  const existingIdentity = await db.query.readerIdentities.findFirst({
+    where: and(
+      eq(readerIdentities.normalizedIdentifier, identity.externalId),
+      eq(readerIdentities.kind, "chatgpt"),
+    ),
+  });
+  const accountId = existingIdentity?.readerAccountId ?? crypto.randomUUID();
+
   await db
     .insert(readerAccounts)
     .values({
-      id: crypto.randomUUID(),
-      externalIdentity: identity.externalId,
-      normalizedEmail: identity.email,
+      id: accountId,
       displayName: identity.displayName,
       updatedAt: now,
     })
     .onConflictDoUpdate({
-      target: readerAccounts.externalIdentity,
+      target: readerAccounts.id,
       set: {
-        normalizedEmail: identity.email,
         displayName: identity.displayName,
         updatedAt: now,
       },
     });
 
+  await db
+    .insert(readerIdentities)
+    .values({
+      id: crypto.randomUUID(),
+      readerAccountId: accountId,
+      kind: "chatgpt",
+      normalizedIdentifier: identity.externalId,
+      verified: true,
+    })
+    .onConflictDoNothing();
+
   const account = await db.query.readerAccounts.findFirst({
-    where: eq(readerAccounts.externalIdentity, identity.externalId),
+    where: eq(readerAccounts.id, accountId),
   });
   if (!account) throw new Error("讀者帳號建立失敗");
   return account;
+}
+
+export async function getReaderAccountIdentifiers(readerAccountId: string) {
+  return getDb()
+    .select({
+      kind: readerIdentities.kind,
+      identifier: readerIdentities.normalizedIdentifier,
+      verified: readerIdentities.verified,
+    })
+    .from(readerIdentities)
+    .where(eq(readerIdentities.readerAccountId, readerAccountId));
+}
+
+export async function updateReaderAccountPreferences(
+  readerAccountId: string,
+  input: { preferredLocale?: "zh-Hant" | "zh-Hans"; marketingOptIn?: boolean },
+) {
+  const now = new Date().toISOString();
+  const values = {
+    ...(input.preferredLocale ? { preferredLocale: input.preferredLocale } : {}),
+    ...(typeof input.marketingOptIn === "boolean"
+      ? {
+          marketingOptIn: input.marketingOptIn,
+          marketingConsentAt: input.marketingOptIn ? now : null,
+        }
+      : {}),
+    updatedAt: now,
+  };
+  await getDb()
+    .update(readerAccounts)
+    .set(values)
+    .where(eq(readerAccounts.id, readerAccountId));
+
+  return getDb().query.readerAccounts.findFirst({
+    where: eq(readerAccounts.id, readerAccountId),
+  });
 }
 
 export async function getReaderState(readerAccountId: string, workId: string) {
